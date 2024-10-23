@@ -1,0 +1,7 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.custom-padding {
+    @apply px-4 md:px-3 lg:px-28
+  }
