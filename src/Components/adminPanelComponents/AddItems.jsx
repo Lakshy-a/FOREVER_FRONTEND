@@ -76,7 +76,7 @@ const AddItems = () => {
     });
 
     try {
-      const response = await axios.post(
+      let response = await axios.post(
         "http://localhost:3001/api/products/addProduct",
         formData,
         {
@@ -85,14 +85,15 @@ const AddItems = () => {
           },
         }
       );
-      console.log(response.data);
-
-      // Reset form and state
       reset();
       setSelectedSizes([]);
       setImagePreviews([null, null, null, null]);
       setImages([]);
+      alert("Product added to db successfully...");
     } catch (error) {
+      if (error.response.data.error === "Product already exist")
+        alert("Product already exist");
+
       console.error("Error uploading product:", error);
     }
   };
@@ -267,11 +268,14 @@ const AddItems = () => {
             Available Colors
           </label>
           <div id="sizes" className="flex gap-4 mt-2">
+            l
             {colorsArray.map((color) => (
               <div
                 key={color}
                 className={`${
-                  selectedSizes.includes(color) ? `bg-pink-200` : "bg-gray-300"
+                  selectedSizes.includes(color)
+                    ? `bg-${color}-700`
+                    : "bg-gray-300"
                 } py-1 px-2 cursor-pointer`}
                 onClick={() => handleColorSelected(color)}
               >

@@ -19,6 +19,7 @@ import AdminPanelHomePage from "./Components/adminPanelComponents/AdminPanelHome
 import AddItems from "./Components/adminPanelComponents/AddItems";
 import ListItems from "./Components/adminPanelComponents/ListItems";
 import Orders from "./Components/adminPanelComponents/Orders";
+import AdminPanelLogin from "./Components/adminPanelComponents/adminPanelLogin";
 
 function App() {
   const location = useLocation();
@@ -28,7 +29,7 @@ function App() {
     location.pathname.startsWith("/adminPanelHomePage") ||
     location.pathname.startsWith("/add") ||
     location.pathname.startsWith("/list") ||
-    location.pathname.startsWith("/orders");
+    location.pathname.startsWith("/orders") || location.pathname.startsWith("/adminPanelLogin") ;
 
   return (
     <>
@@ -51,6 +52,8 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/adminPanelHomePage/*" element={<AdminPanelHomePage />} />
+        <Route path="/adminPanelLogin" element={<AdminPanelLogin />} />
+
         {/* <Route path="/adminPanelHomePage/add" element={<AddItems />} />
         <Route path="/adminPanelHomePage/list" element={<ListItems />} />
         <Route path="/adminPanelHomePage/orders" element={<Orders />} /> */}

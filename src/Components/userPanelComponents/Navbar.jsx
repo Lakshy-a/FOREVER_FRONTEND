@@ -34,7 +34,8 @@ const Navbar = () => {
   };
 
   const handleAdminPanel =() => {
-    window.open('/adminPanelHomePage',  '_blank');
+    window.open('/adminPanelLogin', '_blank');
+    // window.open('/adminPanelHomePage',  '_blank');
   }
 
   const navigate = useNavigate();
