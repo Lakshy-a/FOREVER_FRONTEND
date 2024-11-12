@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import logo from "../../assets/frontend_assets/logo.png";
 import cart_icon from "../../assets/frontend_assets/cart_icon.png";
@@ -9,11 +9,16 @@ import MenuItem from "./MenuItem";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { openSearchBar } from "../../slices/searchBar/searchBarSlice";
+import axios from "axios";
+import { loggedIn, loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
 
 const Navbar = () => {
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  // const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
   const dispatch = useDispatch();
+  const logged = useSelector((state) => state.loggedIn.isLoggedIn);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(logged);
+  const [isUser, setIsUser] = useState("");
+  // const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
 
   const handleNavOpen = () => {
     setIsNavOpen(!isNavOpen);
@@ -28,15 +33,43 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" },
   ];
 
+  // open search bar
   const handleSearchClick = () => {
     navigate("/collection");
     dispatch(openSearchBar());
   };
 
-  const handleAdminPanel =() => {
-    window.open('/adminPanelLogin', '_blank');
+  // open admin panel to new tab
+  const handleAdminPanel = () => {
+    window.open("/adminPanelLogin", "_blank");
     // window.open('/adminPanelHomePage',  '_blank');
-  }
+  };
+
+  // logout
+  const handleLogout = async () => {
+    await axios
+      .post(
+        "http://localhost:3001/api/auth/logout",
+        {},
+        { withCredentials: true }
+      )
+      .then((response) => {
+        console.log(response);
+        dispatch(loggedOut());
+        setIsUser(""); // Reset user profile
+        navigate("/");
+      })
+      .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/auth/userProfile", {
+        withCredentials: true,
+      })
+      .then((response) => setIsUser(response.data.data[0]))
+      .catch((error) => console.log(error));
+  }, [logged]);
 
   const navigate = useNavigate();
 
@@ -63,7 +96,10 @@ const Navbar = () => {
             {name}
           </NavLink>
         ))}
-        <div className="uppercase text-xs border border-black px-3 py-1 rounded-full font-semibold text-gray-700 cursor-pointer" onClick={handleAdminPanel}> 
+        <div
+          className="uppercase text-xs border border-black px-3 py-1 rounded-full font-semibold text-gray-700 cursor-pointer"
+          onClick={handleAdminPanel}
+        >
           Admin Panel
         </div>
       </div>
@@ -71,13 +107,66 @@ const Navbar = () => {
         <div onClick={handleSearchClick}>
           <img src={search_icon} className="w-5 cursor-pointer" alt="search" />
         </div>
-        <NavLink to={"/login"}>
-          <div>
-            <img
-              src={profile_icon}
-              className="w-5 cursor-pointer"
-              alt="profile"
-            />
+        <NavLink className="relative">
+          <div className="relative group">
+            <div
+              className={`${
+                isUser ? "bg-black" : ""
+              } w-6 h-6 rounded-full text-white flex justify-center items-center font-semibold text-base`}
+            >
+              {isUser ? (
+                isUser[0].toUpperCase()
+              ) : (
+                <img
+                  src={profile_icon}
+                  className="w-5 cursor-pointer"
+                  alt="profile"
+                />
+              )}
+            </div>
+
+            <div className="w-fit h-fit rounded-md border border-black absolute top-9 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col gap-2 text-sm font-semibold overflow-hidden">
+              <div className="cursor-pointer hover:bg-black hover:text-white px-4 py-1">
+                Profile
+              </div>
+              {/* <NavLink to="/login">
+                <div className="cursor-pointer px-4 hover:bg-black hover:text-white py-1">
+                  Login
+                </div>
+              </NavLink>
+              <NavLink to="/signup">
+                <div className="cursor-pointer hover:bg-black py-1 hover:text-white px-4 ">
+                  Signup
+                </div>
+              </NavLink> */}
+              {isUser && (
+                <>
+                  <div className="cursor-pointer hover:bg-black hover:text-white px-4 py-1">
+                    Profile
+                  </div>
+                  <div
+                    onClick={handleLogout}
+                    className="cursor-pointer hover:bg-black py-1 hover:text-white px-4 "
+                  >
+                    Logout
+                  </div>
+                </>
+              )}
+              {!isUser && (
+                <>
+                  <NavLink to="/login">
+                    <div className="cursor-pointer px-4 hover:bg-black hover:text-white py-1">
+                      Login
+                    </div>
+                  </NavLink>
+                  <NavLink to="/signup">
+                    <div className="cursor-pointer hover:bg-black py-1 hover:text-white px-4">
+                      Signup
+                    </div>
+                  </NavLink>
+                </>
+              )}
+            </div>
           </div>
         </NavLink>
         <NavLink to={"/cart"}>
@@ -114,7 +203,7 @@ const Navbar = () => {
           <div className="text-gray-500 text-lg font-semibold">Back</div>
         </div>
         <div className="flex flex-col items-start gap-2 mt-4 ">
-          {menuItems.map(( item , index) => (
+          {menuItems.map((item, index) => (
             <MenuItem item={item} key={index} />
           ))}
         </div>

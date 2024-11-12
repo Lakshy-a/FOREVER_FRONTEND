@@ -29,7 +29,9 @@ function App() {
     location.pathname.startsWith("/adminPanelHomePage") ||
     location.pathname.startsWith("/add") ||
     location.pathname.startsWith("/list") ||
-    location.pathname.startsWith("/orders") || location.pathname.startsWith("/adminPanelLogin") ;
+    location.pathname.startsWith("/orders") ||
+    location.pathname.startsWith("/adminPanelLogin") ||
+    location.pathname.startsWith("/users");
 
   return (
     <>

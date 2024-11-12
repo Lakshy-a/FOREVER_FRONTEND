@@ -5,6 +5,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import AddItems from "./AddItems";
 import ListItems from "./ListItems";
 import Orders from "./Orders";
+import Users from "./Users";
 
 const AdminPanelHomePage = () => {
   // Get the current location (URL)
@@ -26,6 +27,7 @@ const AdminPanelHomePage = () => {
           {location.pathname === "/adminPanelHomePage/add" && <AddItems />}
           {location.pathname === "/adminPanelHomePage/list" && <ListItems />}
           {location.pathname === "/adminPanelHomePage/orders" && <Orders />}
+          {location.pathname === "/adminPanelHomePage/users" && <Users />}
         </div>
       </div>
 

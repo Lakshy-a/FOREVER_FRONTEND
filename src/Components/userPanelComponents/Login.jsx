@@ -1,9 +1,12 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { GoHorizontalRule } from "react-icons/go";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { loggedIn, loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
 
 let signInSchema = object({
   email: string().email("Invalid email").required("Email is required"),
@@ -11,6 +14,11 @@ let signInSchema = object({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const logged = useSelector((state) => state.loggedIn.isLoggedIn);
+  const [isLoggedIn, setIsLoggedIn] = useState(logged);
+
   const {
     register,
     handleSubmit,
@@ -20,8 +28,17 @@ const Login = () => {
     resolver: yupResolver(signInSchema),
   });
 
-  const handleClick = (data) => {
-    console.log(data);
+  const handleClick = async (data) => {
+    await axios
+      .post("http://localhost:3001/api/auth/login", data, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        // console.log(data)
+        dispatch(loggedIn());
+        navigate("/");
+      })
+      .catch((error) => console.log(error))
     reset();
   };
 
@@ -35,7 +52,6 @@ const Login = () => {
           </span>
         </div>
         <form className="mt-6 flex flex-col gap-5">
-        
           <input
             className="border py-2 outline-none px-4 text-base w-72 xs:w-[390px] border-black"
             type="text"

@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { GoHorizontalRule } from "react-icons/go";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { number, object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
@@ -14,6 +14,8 @@ let signInSchema = object({
 });
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -25,9 +27,10 @@ const SignUp = () => {
 
   const handleClick = async (data) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signup", data);
-      console.log(res);
+      const res = (await axios.post("http://localhost:3001/api/auth/register", data))
+      // console.log(res);
       reset(); // Reset form after successful submission
+      navigate("/login")
     } catch (error) {
       console.error("Error signing up:", error.response?.data || error.message);
       // Handle error response here, e.g., show an error message to the user
@@ -36,7 +39,7 @@ const SignUp = () => {
 
   return (
     <div className="w-full h-96 flex flex-col items-center justify-center">
-      <div className="text-3xl flex items-center text-black font-serif">
+      <div className="text-3xl flex items-center text-black font-serif mt-24">
         Sign Up
         <span className="text-black ml-2">
           <GoHorizontalRule />
@@ -77,7 +80,7 @@ const SignUp = () => {
         
         <button
           type="submit" // Keep the button type as submit
-          className="bg-black text-white hover:bg-white hover:text-black hover:border border-black px-8 py-2 mt-8 w-72 xs:w-[390px]"
+          className="bg-black text-white hover:bg-white hover:text-black hover:border border-black px-8 py-2 mt-4 w-72 xs:w-[390px]"
         >
           Sign Up
         </button>

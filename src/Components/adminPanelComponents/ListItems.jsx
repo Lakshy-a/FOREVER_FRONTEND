@@ -72,7 +72,7 @@ const ListItems = () => {
                 className="w-12"
               />
             </div>
-            <div className="w-[260px] flex items-center text-sm font-semibold text-gray-500">
+            <div className="w-[300px] flex items-center text-sm font-semibold text-gray-500">
               {product.productName}
             </div>
             <div className="w-[130px] flex items-center text-sm font-semibold text-gray-500">
