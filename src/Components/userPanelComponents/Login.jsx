@@ -35,6 +35,7 @@ const Login = () => {
       })
       .then((response) => {
         // console.log(data)
+        localStorage.setItem('isLoggedIn', JSON.stringify(true));
         dispatch(loggedIn());
         navigate("/");
       })

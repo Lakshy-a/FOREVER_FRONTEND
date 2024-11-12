@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import star_dull_icon from "../../assets/frontend_assets/star_dull_icon.png";
 import star_icon from "../../assets/frontend_assets/star_icon.png";
 import { increment } from "../../slices/cartData/cartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { loggedIn, loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
 
 const ProductDescription = ({ neededProduct }) => {
   const [selectedSize, setSelectedSize] = useState("");
 
   const dispatch = useDispatch();
+  const logged = useSelector((state) => state.loggedIn.isLoggedIn);
   const addedProduct = {
     productId: neededProduct._id,
     productTitle: neededProduct.name,
@@ -20,13 +22,20 @@ const ProductDescription = ({ neededProduct }) => {
   };
 
   const handleAddToCart = () => {
-    if (selectedSize) {
-      dispatch(increment(addedProduct));
-      toast.success("Product added to cart");
-      // addedProduct[productSize] = selectedSize;
-      console.log(addedProduct);
+    const isLogged = JSON.parse(localStorage.getItem('isLoggedIn'));
+    console.log(isLogged)
+
+    if (isLogged) {
+      // user is logged in
+      if (selectedSize) {
+        dispatch(increment(addedProduct));
+        toast.success("Product added to cart");
+        console.log(addedProduct);
+      } else {
+        toast.error("Select Product Size!");
+      }
     } else {
-      toast.error("Select Product Size!");
+      toast.error("You need to login first!");
     }
   };
 
@@ -62,9 +71,11 @@ const ProductDescription = ({ neededProduct }) => {
               <li
                 key={index}
                 onClick={() => handleSizeClick(index)}
-                className={`border ${
-                  selectedSize == size ? "border-red-500" : "border-gray-200"
-                } border-gray-200 px-3 py-1 cursor-pointer bg-slate-200`}
+                className={`border px-3 py-1 cursor-pointer ${
+                  selectedSize == size
+                    ? "border-red-500 bg-red-100 text-red-600"
+                    : "border-gray-200 bg-slate-200"
+                }`}
               >
                 {size}
               </li>

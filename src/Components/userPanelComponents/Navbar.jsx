@@ -10,13 +10,12 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { openSearchBar } from "../../slices/searchBar/searchBarSlice";
 import axios from "axios";
-import { loggedIn, loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
+import { loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const logged = useSelector((state) => state.loggedIn.isLoggedIn);
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(logged);
   const [isUser, setIsUser] = useState("");
   // const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
 
@@ -54,7 +53,7 @@ const Navbar = () => {
         { withCredentials: true }
       )
       .then((response) => {
-        console.log(response);
+        localStorage.setItem("isLoggedIn", JSON.stringify(false));
         dispatch(loggedOut());
         setIsUser(""); // Reset user profile
         navigate("/");
@@ -112,7 +111,7 @@ const Navbar = () => {
             <div
               className={`${
                 isUser ? "bg-black" : ""
-              } w-6 h-6 rounded-full text-white flex justify-center items-center font-semibold text-base`}
+              } w-6 h-6 xs:w-8 xs:h-8 rounded-full text-white flex justify-center items-center font-semibold text-base`}
             >
               {isUser ? (
                 isUser[0].toUpperCase()

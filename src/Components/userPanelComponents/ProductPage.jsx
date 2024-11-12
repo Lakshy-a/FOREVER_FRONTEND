@@ -9,7 +9,6 @@ const ProductPage = () => {
   const products = useSelector((state) => state.products.products);
 
   const { id } = useParams();
-  console.log(id);
 
   const selectedProduct = products.filter((product) => product._id === id);
 
