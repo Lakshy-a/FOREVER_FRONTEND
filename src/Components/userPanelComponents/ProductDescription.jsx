@@ -5,7 +5,6 @@ import { increment } from "../../slices/cartData/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { loggedIn, loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
 
 const ProductDescription = ({ neededProduct }) => {
   const [selectedSize, setSelectedSize] = useState("");
@@ -22,8 +21,8 @@ const ProductDescription = ({ neededProduct }) => {
   };
 
   const handleAddToCart = () => {
-    const isLogged = JSON.parse(localStorage.getItem('isLoggedIn'));
-    console.log(isLogged)
+    const isLogged = JSON.parse(localStorage.getItem("isLoggedIn"));
+    console.log(isLogged);
 
     if (isLogged) {
       // user is logged in

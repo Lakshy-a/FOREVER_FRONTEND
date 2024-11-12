@@ -10,6 +10,7 @@ import {
   resetFilters,
   setSortingFilter,
 } from "../../slices/filterData/filterSlice";
+import axios from "axios";
 
 const filtersData = [
   {
@@ -61,6 +62,11 @@ const CollectionPage = () => {
     }
 
     setFilteredProductList(filteredProducts);
+
+    axios.get("http://localhost:3001/api/products/allProduct",
+    { withCredentials: true })
+    .then((response) => console.log(response))
+    .catch((error) => console.log(error));
   }, [selectedCategories, selectedSubCategories, sortingFilter, products]);
 
   const handleFilterClick = () => {

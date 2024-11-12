@@ -787,6 +787,7 @@ const initialState = {
     },
   ],
   searchQuery:'',
+  newProducts: [],
 };
 
 export const productsSlice = createSlice({
