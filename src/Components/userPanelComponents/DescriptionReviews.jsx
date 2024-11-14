@@ -34,7 +34,7 @@ const DescriptionReviews = () => {
           }`}
           onClick={handleReviewsClick}
         >
-          Reviews ( 0 )
+          Reviews ( 122 )
         </div>
       </div>
       <div className={`border border-gray-300 p-4`}>
