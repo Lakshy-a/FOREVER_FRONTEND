@@ -17,12 +17,6 @@ const Navbar = () => {
   const logged = useSelector((state) => state.loggedIn.isLoggedIn);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isUser, setIsUser] = useState("");
-  // const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
-
-  const handleNavOpen = () => {
-    setIsNavOpen(!isNavOpen);
-  };
-
   const cartCount = useSelector((state) => state.cart.cartCount);
 
   const menuItems = [
@@ -32,48 +26,44 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" },
   ];
 
-  // open search bar
+  const navigate = useNavigate();
+
+  const handleNavOpen = () => setIsNavOpen(!isNavOpen);
+
   const handleSearchClick = () => {
     navigate("/collection");
     dispatch(openSearchBar());
   };
 
-  // open admin panel to new tab
   const handleAdminPanel = () => {
     window.open("/adminPanelLogin", "_blank");
-    // window.open('/adminPanelHomePage',  '_blank');
   };
 
-  // logout
   const handleLogout = async () => {
-    await axios
-      .post(
+    try {
+      await axios.post(
         "http://localhost:3001/api/auth/logout",
         {},
         { withCredentials: true }
-      )
-      .then((response) => {
-        localStorage.setItem("isLoggedIn", JSON.stringify(false));
-        dispatch(loggedOut());
-        setIsUser(""); // Reset user profile
-        navigate("/");
-      })
-      .catch((error) => console.log(error));
+      );
+      localStorage.setItem("isLoggedIn", JSON.stringify(false));
+      dispatch(loggedOut());
+      setIsUser("");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/auth/userProfile", {
-        withCredentials: true,
-      })
-      .then((response) => setIsUser(response.data.data[0]))
+      .get("http://localhost:3001/api/auth/userProfile", { withCredentials: true })
+      .then((response) => setIsUser(response.data.data.name[0]))
       .catch((error) => console.log(error));
   }, [logged]);
 
-  const navigate = useNavigate();
-
   return (
-    <nav className="w-full fit py-4 flex justify-between relative z-10 custom-padding border-b border-gray-200">
+    <nav className="w-full py-4 flex justify-between relative z-10 custom-padding border-b border-gray-200">
       <NavLink to="/">
         <div>
           <img src={logo} className="w-36 cursor-pointer" alt="logo" />
@@ -86,9 +76,7 @@ const Navbar = () => {
             key={name}
             className={({ isActive }) =>
               `uppercase text-sm font-semibold cursor-pointer ${
-                isActive
-                  ? "text-black border-b-2 border-black"
-                  : "text-gray-700"
+                isActive ? "text-black border-b-2 border-black" : "text-gray-700"
               }`
             }
           >
@@ -113,23 +101,17 @@ const Navbar = () => {
                 isUser ? "bg-black" : ""
               } w-6 h-6 xs:w-8 xs:h-8 rounded-full text-white flex justify-center items-center font-semibold text-base`}
             >
-              {isUser ? (
-                isUser[0].toUpperCase()
-              ) : (
-                <img
-                  src={profile_icon}
-                  className="w-5 cursor-pointer"
-                  alt="profile"
-                />
-              )}
+              {isUser ? isUser[0].toUpperCase() : <img src={profile_icon} className="w-5" alt="profile" />}
             </div>
 
             <div className="w-fit h-fit rounded-md border border-black absolute top-9 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 flex flex-col gap-2 text-sm font-semibold overflow-hidden">
-              {isUser && (
+              {isUser ? (
                 <>
-                  <div className="cursor-pointer hover:bg-black hover:text-white px-4 py-1">
-                    Profile
-                  </div>
+                  <NavLink to={"/profile"}>
+                    <div className="cursor-pointer hover:bg-black hover:text-white px-4 py-1">
+                      Profile
+                    </div>
+                  </NavLink>
                   <div
                     onClick={handleLogout}
                     className="cursor-pointer hover:bg-black py-1 hover:text-white px-4 "
@@ -137,8 +119,7 @@ const Navbar = () => {
                     Logout
                   </div>
                 </>
-              )}
-              {!isUser && (
+              ) : (
                 <>
                   <NavLink to="/login">
                     <div className="cursor-pointer px-4 hover:bg-black hover:text-white py-1">

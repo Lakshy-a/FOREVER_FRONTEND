@@ -20,6 +20,7 @@ import AddItems from "./Components/adminPanelComponents/AddItems";
 import ListItems from "./Components/adminPanelComponents/ListItems";
 import Orders from "./Components/adminPanelComponents/Orders";
 import AdminPanelLogin from "./Components/adminPanelComponents/adminPanelLogin";
+import UserProfile from "./Components/userPanelComponents/UserProfile";
 
 function App() {
   const location = useLocation();
@@ -55,6 +56,8 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/adminPanelHomePage/*" element={<AdminPanelHomePage />} />
         <Route path="/adminPanelLogin" element={<AdminPanelLogin />} />
+        <Route path="/profile" element={<UserProfile />} />
+
 
         {/* <Route path="/adminPanelHomePage/add" element={<AddItems />} />
         <Route path="/adminPanelHomePage/list" element={<ListItems />} />
