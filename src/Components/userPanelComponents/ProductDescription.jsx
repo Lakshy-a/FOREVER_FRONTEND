@@ -20,6 +20,7 @@ const ProductDescription = ({ product }) => {
     stockQuantity = 0,
     productDescription = "No description available.",
     availableSizes = [],
+    reviews,
   } = product;
 
   // Ensure availableSizes is an array of strings

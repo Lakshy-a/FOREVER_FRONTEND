@@ -30,7 +30,7 @@ const ProductPage = () => {
           <div><ProductDescription product={product}  /></div>
         </div>
         <div className="mt-16">
-          <DescriptionReviews />
+          <DescriptionReviews id={id} />
         </div>
       </div>
     </>
