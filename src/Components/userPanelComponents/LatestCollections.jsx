@@ -14,7 +14,7 @@ const LatestCoection = () => {
         setLatestCollection(
           response.data.data.filter(
             (filterProduct) =>
-              filterProduct.isNewCollection && filterProduct.isActive
+              filterProduct.isNewCollection && !filterProduct.isDeleted
           )
         )
       )

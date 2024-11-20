@@ -55,7 +55,7 @@ const CollectionPage = () => {
       .get("http://localhost:3001/api/products/allProduct")
       .then((response) =>
         setProducts(
-          response.data.data.filter((filterProduct) => filterProduct.isActive)
+          response.data.data.filter((filterProduct) => !filterProduct.isDeleted)
         )
       )
       .catch((error) => console.log(error));
