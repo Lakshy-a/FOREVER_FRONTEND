@@ -1,13 +1,12 @@
 import React from "react";
 import { GoHorizontalRule } from "react-icons/go";
-import { useSelector } from "react-redux";
 import CartProducts from "./CartProducts";
 import CartTotals from "./CartTotals";
+import { useSelector } from "react-redux";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const cartCount = useSelector((state) => state.cart.cartCount);
-
   return (
     <>
       <div className="custom-padding w-full h-fit">

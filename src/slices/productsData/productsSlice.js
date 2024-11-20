@@ -802,9 +802,12 @@ export const productsSlice = createSlice({
     },
     deleteProduct: (state, action) => {
       state.products = state.products.filter((product) => product._id !== action.payload);
+    },
+    setNewProducts: (state, action) => {
+      state.newProducts.push(action.payload);
     }
   },
 });
 
-export const { addproduct, setSearchQuery, deleteProduct } = productsSlice.actions;
+export const { addproduct, setSearchQuery, deleteProduct, setNewProducts } = productsSlice.actions;
 export default productsSlice.reducer;

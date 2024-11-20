@@ -10,16 +10,12 @@ const CartProducts = () => {
 
   const dispatch = useDispatch();
 
-  
-
   return (
     <>
       <div className="">
-        {
-          cartItems.map(
-            (item, index) => <ProductsInsideCart index={index} key={index} item={item}/>
-          )
-        }
+        {cartItems.map((item, index) => (
+          <ProductsInsideCart index={index} key={index} item={item} />
+        ))}
       </div>
     </>
   );

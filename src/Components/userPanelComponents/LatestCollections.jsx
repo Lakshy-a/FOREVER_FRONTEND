@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { GoHorizontalRule } from "react-icons/go";
 import { useSelector } from "react-redux";
 import SingleProduct from "./SingleProduct";
+import axios from "axios";
 
 const LatestCoection = () => {
-  const products = useSelector((state) => state.products.products);
+  const [latestCollection, setLatestCollection] = useState([]);
 
-  const sortedProducts = [...products].sort((a, b) => b.date - a.date);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/products/allProduct")
+      .then((response) =>
+        setLatestCollection(
+          response.data.data.filter(
+            (filterProduct) =>
+              filterProduct.isNewCollection && filterProduct.isActive
+          )
+        )
+      )
+      .catch((error) => console.log(error));
+  }, []);
+
   // console.log(sortedProducts);
 
   return (
@@ -23,10 +37,8 @@ const LatestCoection = () => {
           industry. Lorem Ipsum has been the.
         </p>
         <div className="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 lg:grid-cols-5 ">
-          {sortedProducts.filter(
-            (product, index) => (index <= 9)
-          ).map((product, index) => (
-            <SingleProduct key={index} product={product} />
+          {latestCollection.map((product) => (
+            <SingleProduct key={product.id} product={product} />
           ))}
         </div>
       </div>

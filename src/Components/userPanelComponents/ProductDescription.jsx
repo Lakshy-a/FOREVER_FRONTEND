@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import star_dull_icon from "../../assets/frontend_assets/star_dull_icon.png";
 import star_icon from "../../assets/frontend_assets/star_icon.png";
 import { increment } from "../../slices/cartData/cartSlice";
@@ -6,72 +6,87 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ProductDescription = ({ neededProduct }) => {
+const ProductDescription = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState("");
-
   const dispatch = useDispatch();
   const logged = useSelector((state) => state.loggedIn.isLoggedIn);
-  const addedProduct = {
-    productId: neededProduct._id,
-    productTitle: neededProduct.name,
-    productPrice: neededProduct.price,
-    productImage: neededProduct.image[0],
-    productSize: selectedSize,
-    productQuantity: neededProduct.quantity,
-  };
 
+  // Fallback values for product fields
+  const {
+    _id = "",
+    productName = "Unnamed Product",
+    productPrice = 0,
+    images = [],
+    stockQuantity = 0,
+    productDescription = "No description available.",
+    availableSizes = [],
+  } = product;
+
+  // Ensure availableSizes is an array of strings
+  const parsedSizes = Array.isArray(availableSizes)
+    ? availableSizes
+    : JSON.parse(availableSizes || "[]");
+
+  useEffect(() => {
+    console.log(product);
+  }, []);
+
+  // Handle Add to Cart
   const handleAddToCart = () => {
-    const isLogged = JSON.parse(localStorage.getItem("isLoggedIn"));
-    console.log(isLogged);
-
-    if (isLogged) {
-      // user is logged in
-      if (selectedSize) {
-        dispatch(increment(addedProduct));
-        toast.success("Product added to cart");
-        console.log(addedProduct);
-      } else {
-        toast.error("Select Product Size!");
-      }
-    } else {
-      toast.error("You need to login first!");
+    if (!logged) {
+      toast.error("You need to log in first!");
+      return;
     }
+
+    if (!selectedSize) {
+      toast.error("Select a product size!");
+      return;
+    }
+
+    const addedProduct = {
+      productId: _id,
+      productTitle: productName,
+      productPrice,
+      productImage: images[0], // Main image
+      productSize: selectedSize,
+      productQuantity: 1, // Default quantity
+    };
+
+    dispatch(increment(addedProduct));
+    toast.success("Product added to cart!");
   };
 
-  const handleSizeClick = (index) => {
-    addedProduct.productSize = neededProduct.sizes[index];
-    setSelectedSize(neededProduct.sizes[index]);
+  // Handle Size Selection
+  const handleSizeClick = (size) => {
+    setSelectedSize(size);
   };
 
   return (
     <>
       <ToastContainer />
-
-      <div className="flex flex-col gap-2 border-b pb-4 ">
-        <h1 className="text-2xl font-semibold mt-4">{neededProduct.name}</h1>
+      <div className="flex flex-col gap-2 border-b pb-4">
+        <h1 className="text-2xl font-semibold mt-4">{productName}</h1>
         <div className="flex gap-2 items-center">
-          <img src={star_icon} className="w-3 h-3" />
-          <img src={star_icon} className="w-3 h-3" />
-          <img src={star_icon} className="w-3 h-3" />
-          <img src={star_icon} className="w-3 h-3" />
-          <img src={star_dull_icon} className="w-3 h-3" />
+          <img src={star_icon} className="w-3 h-3" alt="Star" />
+          <img src={star_icon} className="w-3 h-3" alt="Star" />
+          <img src={star_icon} className="w-3 h-3" alt="Star" />
+          <img src={star_icon} className="w-3 h-3" alt="Star" />
+          <img src={star_dull_icon} className="w-3 h-3" alt="Star Dull" />
           <div>(122)</div>
         </div>
-        <div className="text-3xl font-semibold mt-4">
-          ${neededProduct.price}
-        </div>
+        <div className="text-3xl font-semibold mt-4">${productPrice}</div>
         <p className="text-medium font-normal text-gray-500 mt-4">
-          {neededProduct.description}
+          {productDescription}
         </p>
         <div>
           <h2 className="font-medium mt-4">Select Size</h2>
           <ul className="flex mt-4 gap-4">
-            {neededProduct.sizes.map((size, index) => (
+            {parsedSizes.map((size, index) => (
               <li
                 key={index}
-                onClick={() => handleSizeClick(index)}
+                onClick={() => handleSizeClick(size)}
                 className={`border px-3 py-1 cursor-pointer ${
-                  selectedSize == size
+                  selectedSize === size
                     ? "border-red-500 bg-red-100 text-red-600"
                     : "border-gray-200 bg-slate-200"
                 }`}

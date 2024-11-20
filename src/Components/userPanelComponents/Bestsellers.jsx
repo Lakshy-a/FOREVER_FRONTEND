@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { GoHorizontalRule } from "react-icons/go";
 import { useSelector } from "react-redux";
 import SingleProduct from "./SingleProduct";
+import axios from "axios";
 
 const Bestsellers = () => {
-  const products = useSelector((state) => state.products.products);
+  const [featuredCollection, setFeaturedCollection] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/products/allProduct")
+      .then((response) =>
+        setFeaturedCollection(
+          response.data.data.filter(
+            (filterProduct) => filterProduct.isFeatured && filterProduct.isActive
+          )
+        )
+      )
+      .catch((error) => console.log(error));
+  }, []);
 
   return (
     <>
       <div className="flex flex-col items-center mt-20">
         <div className="uppercase text-3xl text-gray-400 font-semibold flex items-center justify-center mt-8">
-          Best <span className="text-black ml-2">Sellers</span>
+          Featured <span className="text-black ml-2">Collection</span>
           <span className="text-black ml-2">
             <GoHorizontalRule />
           </span>
@@ -20,11 +34,9 @@ const Bestsellers = () => {
           industry. Lorem Ipsum has been the.
         </p>
         <div className="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 lg:grid-cols-5 ">
-          {products
-            .filter((product) => product.bestseller)
-            .map((product, index) => (
-              <SingleProduct key={index} product={product} />
-            ))}
+          {featuredCollection.map((product, index) => (
+            <SingleProduct key={index} product={product} />
+          ))}
         </div>
       </div>
     </>

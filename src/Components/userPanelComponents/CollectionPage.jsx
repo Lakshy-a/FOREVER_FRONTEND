@@ -26,48 +26,12 @@ const filtersData = [
 const CollectionPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const dispatch = useDispatch();
-  const [filteredProductList, setFilteredProductList] = useState([]);
-  const products = useSelector((state) => state.products.products);
-  const selectedCategories = useSelector((state) => state.filter.categories);
-  const selectedSubCategories = useSelector(
-    (state) => state.filter.subCategories
-  );
   const sortingFilter = useSelector((state) => state.filter.sortFilters);
   const isSearchBarOpen = useSelector(
     (state) => state.searchBar.isSearchBarOpen
   );
   const clearFilter = useSelector((state) => state.filter.clearFilter);
-
-  useEffect(() => {
-    // Filter products based on categories and subcategories
-    let filteredProducts = [...products];
-
-    if (selectedCategories.length > 0) {
-      filteredProducts = filteredProducts.filter((product) =>
-        selectedCategories.includes(product.category)
-      );
-    }
-
-    if (selectedSubCategories.length > 0) {
-      filteredProducts = filteredProducts.filter((product) =>
-        selectedSubCategories.includes(product.subCategory)
-      );
-    }
-
-    // Apply sorting
-    if (sortingFilter === "lowToHigh") {
-      filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
-    } else if (sortingFilter === "highToLow") {
-      filteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
-    }
-
-    setFilteredProductList(filteredProducts);
-
-    axios.get("http://localhost:3001/api/products/allProduct",
-    { withCredentials: true })
-    .then((response) => console.log(response))
-    .catch((error) => console.log(error));
-  }, [selectedCategories, selectedSubCategories, sortingFilter, products]);
+  const [products, setProducts] = useState([]);
 
   const handleFilterClick = () => {
     setIsFilterOpen(!isFilterOpen);
@@ -84,6 +48,18 @@ const CollectionPage = () => {
   const handleClearFilters = () => {
     dispatch(resetFilters());
   };
+
+  // fetch products from db and set them
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/api/products/allProduct")
+      .then((response) =>
+        setProducts(
+          response.data.data.filter((filterProduct) => filterProduct.isActive)
+        )
+      )
+      .catch((error) => console.log(error));
+  }, []);
 
   return (
     <div className="custom-padding mt-8 ">
@@ -136,8 +112,10 @@ const CollectionPage = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 lg:grid-cols-4 ">
-            {filteredProductList.map((product, index) => (
-              <SingleProduct key={index} product={product} />
+            {products.map((product, index) => (
+              <div key={index}>
+                <SingleProduct product={product} />
+              </div>
             ))}
           </div>
         </div>

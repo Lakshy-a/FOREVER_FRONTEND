@@ -89,6 +89,7 @@ const AddItems = () => {
       setSelectedSizes([]);
       setImagePreviews([null, null, null, null]);
       setImages([]);
+      console.log(formData);
       alert("Product added to db successfully...");
     } catch (error) {
       if (error.response.data.error === "Product already exist")
@@ -97,6 +98,32 @@ const AddItems = () => {
       console.error("Error uploading product:", error);
     }
   };
+  // const onSubmit = async (data) => {
+  //      const formData = new FormData();
+
+  //      // Append form data fields
+  //      formData.append("productName", data.productName);
+  //      formData.append("productDescription", data.productDescription);
+  //      formData.append("productCategory", data.productCategory);
+  //      formData.append("productSubCategory", data.productSubCategory);
+  //      formData.append("productPrice", data.productPrice);
+  //      formData.append("productDiscountedPrice", data.productDiscountedPrice);
+  //      formData.append("stockQuantity", data.stockQuantity);
+  //      formData.append("isBestseller", data.isBestseller || false);
+  //      formData.append("isNewCollection", data.isNewCollection || false);
+  //      formData.append("isFeatured", data.isFeatured || false);
+
+  //      // Append selected sizes and colors as JSON strings
+  //      formData.append("availableSizes", JSON.stringify(selectedSizes));
+  //      formData.append("availableColors", JSON.stringify(selectedColors));
+
+  //      // Append each image to formData
+  //      productImages.forEach((image, index) => {
+  //        formData.append("productImages", image);
+  //      });
+
+  //      console.log(formData)
+  // }
 
   return (
     <>

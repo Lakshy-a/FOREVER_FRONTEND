@@ -58,7 +58,6 @@ function App() {
         <Route path="/adminPanelLogin" element={<AdminPanelLogin />} />
         <Route path="/profile" element={<UserProfile />} />
 
-
         {/* <Route path="/adminPanelHomePage/add" element={<AddItems />} />
         <Route path="/adminPanelHomePage/list" element={<ListItems />} />
         <Route path="/adminPanelHomePage/orders" element={<Orders />} /> */}

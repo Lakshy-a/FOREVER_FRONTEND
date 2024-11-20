@@ -57,7 +57,9 @@ const Navbar = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/auth/userProfile", { withCredentials: true })
+      .get("http://localhost:3001/api/auth/userProfile", {
+        withCredentials: true,
+      })
       .then((response) => setIsUser(response.data.data.name[0]))
       .catch((error) => console.log(error));
   }, [logged]);
@@ -76,7 +78,9 @@ const Navbar = () => {
             key={name}
             className={({ isActive }) =>
               `uppercase text-sm font-semibold cursor-pointer ${
-                isActive ? "text-black border-b-2 border-black" : "text-gray-700"
+                isActive
+                  ? "text-black border-b-2 border-black"
+                  : "text-gray-700"
               }`
             }
           >
@@ -101,7 +105,11 @@ const Navbar = () => {
                 isUser ? "bg-black" : ""
               } w-6 h-6 xs:w-8 xs:h-8 rounded-full text-white flex justify-center items-center font-semibold text-base`}
             >
-              {isUser ? isUser[0].toUpperCase() : <img src={profile_icon} className="w-5" alt="profile" />}
+              {isUser ? (
+                isUser[0].toUpperCase()
+              ) : (
+                <img src={profile_icon} className="w-5" alt="profile" />
+              )}
             </div>
 
             <div className="w-fit h-fit rounded-md border border-black absolute top-9 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 flex flex-col gap-2 text-sm font-semibold overflow-hidden">

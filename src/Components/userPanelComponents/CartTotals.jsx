@@ -43,7 +43,7 @@ const CartTotals = ({placeOrder}) => {
         </div>
         <div className="flex justify-end w-full">
           <NavLink to={"/checkout"}>
-            <button className={`mt-4 uppercase bg-black hover:bg-white hover:text-black hover:border-black hover:border text-white text-sm px-5 py-3 ${placeOrder ? "bloack" : "hidden"}`}>
+            <button className={`mt-4 uppercase bg-black hover:bg-white hover:text-black hover:border-black hover:border text-white text-sm px-5 py-3 ${placeOrder ? "block" : "hidden"}`}>
               Proceed To Checkout
             </button>
           </NavLink>
