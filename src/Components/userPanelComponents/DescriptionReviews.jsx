@@ -27,15 +27,28 @@ const DescriptionReviews = ({ id }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/products/productsById/${id}`)
+      .get(`http://localhost:3001/api/reviews/getReviewsByProduct/${id}`, {
+        withCredentials: true,
+      })
       .then((response) => {
-        const reviews = response.data.data.reviews || [];
-        setReviewsCount(reviews.length);
-        setReviewText(reviews);
-        console.log(response.data.data);
+        console.log(response.data.data)
+        setReviewsCount(response.data.data.length);
+        setReviewText(response.data.data);
       })
       .catch((error) => console.log(error));
   }, [addReview]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://localhost:3001/api/reviews/getReviewsByProduct/${id}`)
+  //     .then((response) => {
+  //       const reviews = response.data.data.reviews || [];
+  //       setReviewsCount(reviews.length);
+  //       setReviewText(reviews);
+  //       console.log(response.data.data);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, [addReview]);
 
   const renderStars = (rating) => {
     const stars = [];
@@ -126,9 +139,9 @@ const DescriptionReviews = ({ id }) => {
             reviewText.map((review, index) => (
               <div
                 key={index}
-                className="mt-4 border border-gray-300 p-4 text-gray-900 font-semibold flex gap-4"
+                className="mt-4 border border-gray-300 p-4 text-gray-900 font-semibold flex gap-4 justify-start items-center"
               >
-                <div className="p-5 bg-black w-fit rounded-full">{}</div>
+                <div className="h-10 w-10 flex justify-center items-center font-bold text-lg  bg-black rounded-full text-white">{review.userId.name[0].toUpperCase()}</div>
                 <div>
                   <div className="flex items-center mb-2">
                     {renderStars(review.rating)}
