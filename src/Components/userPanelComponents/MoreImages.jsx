@@ -20,7 +20,7 @@ const MoreImages = ({ images = [] }) => {
         <img
           src={mainImage}
           alt="Main Display"
-          className="xs:w-[760px] object-cover"
+          className="w-[500px] xs:w-[620px] xs:h-[550px] object-cover"
         />
       </div>
 

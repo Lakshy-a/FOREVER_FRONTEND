@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import star_dull_icon from "../../assets/frontend_assets/star_dull_icon.png";
 import star_icon from "../../assets/frontend_assets/star_icon.png";
+import { FaStarHalfAlt, FaStar } from "react-icons/fa";
+import { AiOutlineStar } from "react-icons/ai";
 
 const DescriptionReviews = ({ id }) => {
   const [description, setDescription] = useState(true);
@@ -9,6 +11,9 @@ const DescriptionReviews = ({ id }) => {
   const [reviewsCount, setReviewsCount] = useState(0);
   const [reviewText, setReviewText] = useState([]);
   const [addReview, setAddReview] = useState(false);
+  const [selectedRating, setSelectedRating] = useState();
+  const [hoveredRating, setHoveredRating] = useState(0); // New hover state
+  const [reviewComment, setReviewComment] = useState(""); // State for the comment
 
   const handleDescriptionClick = () => {
     setDescription(true);
@@ -30,25 +35,45 @@ const DescriptionReviews = ({ id }) => {
         console.log(response.data.data);
       })
       .catch((error) => console.log(error));
-  }, [id]);
+  }, [addReview]);
 
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <img
-          key={i}
-          src={i <= rating ? star_icon : star_dull_icon}
-          alt={i <= rating ? "star " : "dull star "}
-          className="w-4 h-4 inline-block mx-1"
-        />
-      );
+      if (i <= rating) {
+        stars.push(<FaStar key={i} className="text-yellow-500" />);
+      } else if (i - rating < 1) {
+        stars.push(<FaStarHalfAlt key={i} className="text-yellow-500" />);
+      } else {
+        stars.push(<AiOutlineStar key={i} className="text-gray-300" />);
+      }
     }
-    return stars;
+    return <div className="flex">{stars}</div>;
   };
 
   const handleAddReview = () => {
-    setAddReview(!addReview);
+    if (addReview) {
+      const newReview = {
+        review: reviewComment,
+        rating: selectedRating,
+        productId: id,
+      };
+
+      axios
+        .post("http://localhost:3001/api/reviews/addReview", newReview, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log(response);
+          // Reset states after successful review posting
+          setAddReview(false);
+          setReviewComment("");
+          setSelectedRating(0);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      setAddReview(true);
+    }
   };
 
   return (
@@ -119,11 +144,39 @@ const DescriptionReviews = ({ id }) => {
             addReview && reviews ? "block" : "hidden"
           } mt-4 border border-gray-300 p-4 text-gray-900 flex flex-col gap-1 font-semibold`}
         >
-          <div>Rating:</div>
-          <label htmlFor="reviewComment">Comment:</label>
+          <div className="flex gap-2">
+            Rating :{" "}
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <label
+                  key={index}
+                  onMouseEnter={() => setHoveredRating(index + 1)}
+                  onMouseLeave={() => setHoveredRating(0)}
+                >
+                  <input
+                    type="radio"
+                    name="rate"
+                    value={index + 1}
+                    className="hidden"
+                    onChange={() => setSelectedRating(index + 1)}
+                  />
+                  <FaStar
+                    className={`cursor-pointer ${
+                      index + 1 <= (hoveredRating || selectedRating)
+                        ? "text-yellow-500"
+                        : "text-gray-300"
+                    }`}
+                  />
+                </label>
+              ))}
+            </div>
+          </div>
+          <label htmlFor="reviewComment">Comment :</label>
           <textarea
             id="reviewComment"
-            className="w-full p-2 border border-gray-300 rounded-md outline-none"
+            className="w-full p-2 border border-gray-300 rounded-md outline-none font-normal"
+            value={reviewComment}
+            onChange={(e) => setReviewComment(e.target.value)}
           />
         </div>
         <div
@@ -133,7 +186,7 @@ const DescriptionReviews = ({ id }) => {
             className="mt-4 px-4 py-2 rounded-full cursor-pointer font-semibold hover:bg-white hover:text-black hover:border border-gray-900  w-fit bg-black text-white"
             onClick={handleAddReview}
           >
-            Add Review
+            {addReview ? "Post Review" : "Write a Review"}
           </button>
         </div>
       </div>
