@@ -5,6 +5,9 @@ import { increment } from "../../slices/cartData/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaStarHalfAlt, FaStar } from "react-icons/fa";
+import { AiOutlineStar } from "react-icons/ai";
+import { ImStarEmpty } from "react-icons/im";
 
 const ProductDescription = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState("");
@@ -21,6 +24,7 @@ const ProductDescription = ({ product }) => {
     productDescription = "No description available.",
     availableSizes = [],
     reviews,
+    averageRating,
   } = product;
 
   // Ensure availableSizes is an array of strings
@@ -62,18 +66,33 @@ const ProductDescription = ({ product }) => {
     setSelectedSize(size);
   };
 
+  const remainingRating = 5 - averageRating;
+  const fullRating = Math.floor(averageRating);
+  const halfRating = averageRating - fullRating || 0;
+
   return (
     <>
       <ToastContainer />
       <div className="flex flex-col gap-2 border-b pb-4">
         <h1 className="text-2xl font-semibold mt-4">{productName}</h1>
         <div className="flex gap-2 items-center">
-          <img src={star_icon} className="w-3 h-3" alt="Star" />
-          <img src={star_icon} className="w-3 h-3" alt="Star" />
-          <img src={star_icon} className="w-3 h-3" alt="Star" />
-          <img src={star_icon} className="w-3 h-3" alt="Star" />
-          <img src={star_dull_icon} className="w-3 h-3" alt="Star Dull" />
-          <div>(122)</div>
+          {/* Full Stars */}
+          {Array.from({ length: fullRating }, (_, index) => (
+            <FaStar key={index} className="text-yellow-500" />
+          ))}
+
+          {/* Half Star */}
+          {averageRating % 1 !== 0 && (
+            <FaStarHalfAlt className="text-yellow-500" />
+          )}
+
+          {/* Empty Stars */}
+          {Array.from({ length: 5 - Math.ceil(averageRating) }, (_, index) => (
+            <ImStarEmpty key={index} className="text-gray-500" />
+          ))}
+
+          {/* Rating Value */}
+          <div>({Math.round(averageRating * 2) / 2})</div>
         </div>
         <div className="text-3xl font-semibold mt-4">${productPrice}</div>
         <p className="text-medium font-normal text-gray-500 mt-4">

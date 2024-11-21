@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import star_dull_icon from "../../assets/frontend_assets/star_dull_icon.png";
 import star_icon from "../../assets/frontend_assets/star_icon.png";
 import { FaStarHalfAlt, FaStar } from "react-icons/fa";
-import { AiOutlineStar } from "react-icons/ai";
+import { ImStarEmpty } from "react-icons/im";
 
 const DescriptionReviews = ({ id }) => {
   const [description, setDescription] = useState(true);
@@ -31,34 +31,22 @@ const DescriptionReviews = ({ id }) => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response.data.data)
+        console.log(response.data.data);
         setReviewsCount(response.data.data.length);
         setReviewText(response.data.data);
       })
       .catch((error) => console.log(error));
   }, [addReview]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://localhost:3001/api/reviews/getReviewsByProduct/${id}`)
-  //     .then((response) => {
-  //       const reviews = response.data.data.reviews || [];
-  //       setReviewsCount(reviews.length);
-  //       setReviewText(reviews);
-  //       console.log(response.data.data);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, [addReview]);
-
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= rating) {
-        stars.push(<FaStar key={i} className="text-yellow-500" />);
+        stars.push(<FaStar key={i} className="text-yellow-500 mx-1" />);
       } else if (i - rating < 1) {
-        stars.push(<FaStarHalfAlt key={i} className="text-yellow-500" />);
+        stars.push(<FaStarHalfAlt key={i} className="text-yellow-500 mx-1" />);
       } else {
-        stars.push(<AiOutlineStar key={i} className="text-gray-300" />);
+        stars.push(<ImStarEmpty key={i} className="text-gray-300 mx-1" />);
       }
     }
     return <div className="flex">{stars}</div>;
@@ -141,9 +129,11 @@ const DescriptionReviews = ({ id }) => {
                 key={index}
                 className="mt-4 border border-gray-300 p-4 text-gray-900 font-semibold flex gap-4 justify-start items-center"
               >
-                <div className="h-10 w-10 flex justify-center items-center font-bold text-lg  bg-black rounded-full text-white">{review.userId.name[0].toUpperCase()}</div>
+                <div className="h-10 w-10 flex justify-center items-center font-bold text-lg  bg-black rounded-full text-white">
+                  {review.userId.name[0].toUpperCase()}
+                </div>
                 <div>
-                  <div className="flex items-center mb-2">
+                  <div className="flex items-center mb-2 gap-2">
                     {renderStars(review.rating)}
                   </div>
                   <p className="text-sm">{review.review}</p>
