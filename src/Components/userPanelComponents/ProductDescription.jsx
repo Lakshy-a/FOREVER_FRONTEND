@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaStarHalfAlt, FaStar } from "react-icons/fa";
 import { AiOutlineStar } from "react-icons/ai";
 import { ImStarEmpty } from "react-icons/im";
+import axios from "axios";
 
 const ProductDescription = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState("");
@@ -32,9 +33,14 @@ const ProductDescription = ({ product }) => {
     ? availableSizes
     : JSON.parse(availableSizes || "[]");
 
+  const productSizes = [];
+  productSizes[0] = parsedSizes[2];
+  productSizes[1] = parsedSizes[6];
+  productSizes[2] = parsedSizes[10];
+
   useEffect(() => {
-    console.log(product);
-  }, []);
+    console.log("Product", product);
+  });
 
   // Handle Add to Cart
   const handleAddToCart = () => {
@@ -48,7 +54,7 @@ const ProductDescription = ({ product }) => {
       return;
     }
 
-    const addedProduct = {
+    const productData = {
       productId: _id,
       productTitle: productName,
       productPrice,
@@ -57,7 +63,18 @@ const ProductDescription = ({ product }) => {
       productQuantity: 1, // Default quantity
     };
 
-    dispatch(increment(addedProduct));
+    axios
+      .post(
+        "http://localhost:3001/api/cart/addToCart",
+        { productData, quantity: 1 },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((response) => console.log(response))
+      .catch((error) => console.error(error));
+
+    dispatch(increment(productData));
     toast.success("Product added to cart!");
   };
 
@@ -66,9 +83,7 @@ const ProductDescription = ({ product }) => {
     setSelectedSize(size);
   };
 
-  const remainingRating = 5 - averageRating;
   const fullRating = Math.floor(averageRating);
-  const halfRating = averageRating - fullRating || 0;
 
   return (
     <>

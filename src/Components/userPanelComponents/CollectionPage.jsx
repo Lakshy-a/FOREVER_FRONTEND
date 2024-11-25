@@ -11,6 +11,7 @@ import {
   setSortingFilter,
 } from "../../slices/filterData/filterSlice";
 import axios from "axios";
+import { setNewProducts } from "../../slices/productsData/productsSlice";
 
 const filtersData = [
   {
@@ -32,6 +33,7 @@ const CollectionPage = () => {
   );
   const clearFilter = useSelector((state) => state.filter.clearFilter);
   const [products, setProducts] = useState([]);
+  const [originalProducts, setOriginalProducts] = useState([]);
 
   const handleFilterClick = () => {
     setIsFilterOpen(!isFilterOpen);
@@ -42,7 +44,17 @@ const CollectionPage = () => {
   };
 
   const handleSortChange = (event) => {
-    dispatch(setSortingFilter(event.target.value));
+    const value = event.target.value;
+
+    if (value === "lowToHigh")
+      setProducts((prev) =>
+        [...prev].sort((a, b) => a.productPrice - b.productPrice)
+      );
+    else if (value === "highToLow")
+      setProducts((prev) =>
+        [...prev].sort((a, b) => b.productPrice - a.productPrice)
+      );
+    else if (value === "relevant") setProducts(originalProducts);
   };
 
   const handleClearFilters = () => {
@@ -53,11 +65,13 @@ const CollectionPage = () => {
   useEffect(() => {
     axios
       .get("http://localhost:3001/api/products/allProduct")
-      .then((response) =>
+      .then((response) => {
         setProducts(
           response.data.data.filter((filterProduct) => !filterProduct.isDeleted)
-        )
-      )
+        );
+        setOriginalProducts(response.data.data);
+        dispatch(setNewProducts(response.data.data))
+      })
       .catch((error) => console.log(error));
   }, []);
 
@@ -76,7 +90,7 @@ const CollectionPage = () => {
             className="text-xl font-semibold flex items-center justify-between gap-2 uppercase mt-2"
             onClick={handleFilterClick}
           >
-            <h1 className="cursor-pointer">Filters</h1>{" "}
+            <h1 className="">Filters</h1>{" "}
             <h1 className="cursor-pointer" onClick={handleClearFilters}>
               Clear Filters
             </h1>
