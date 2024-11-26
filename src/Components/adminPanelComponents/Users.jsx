@@ -9,7 +9,7 @@ const Users = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/admin/getAllUsers", {
+      .get(`${import.meta.env.VITE_API_BASE_URL}/admin/getAllUsers`, {
         withCredentials: true,
       })
       .then((response) => {

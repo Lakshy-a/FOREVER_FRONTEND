@@ -30,7 +30,7 @@ const Login = () => {
 
   const handleClick = async (data) => {
     await axios
-      .post("http://localhost:3001/api/auth/login", data)
+      .post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, data)
       .then((response) => {
         sessionStorage.setItem("accessToken", response.data.data);
         dispatch(loggedIn());

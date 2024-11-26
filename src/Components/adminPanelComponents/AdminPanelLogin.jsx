@@ -25,7 +25,7 @@ const Login = () => {
 
   const handleClick = async (data) => {
     console.log(data);
-    const response = await axios.post("http://localhost:3001/api/admin/adminLogin", data, {
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/admin/adminLogin`, data, {
       withCredentials: true, // Include cookies in requests
     });
     

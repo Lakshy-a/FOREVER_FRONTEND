@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { increment, decrement } from "../../slices/cartData/cartSlice";
 import ProductsInsideCart from "./ProductsInsideCart";
+import axios from "axios";
 
 const CartProducts = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const total = useSelector((state) => state.cart.cartCount);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_API_BASE_URL}/cart/getUsersCart`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <>

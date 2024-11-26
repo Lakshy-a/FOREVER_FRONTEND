@@ -42,7 +42,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:3001/api/auth/logout",
+        `${import.meta.env.VITE_API_BASE_URL}/auth/logout`,
         {},
         {
           headers: {
@@ -68,7 +68,7 @@ const Navbar = () => {
       if (accessToken) {
         try {
           const response = await axios.get(
-            "http://localhost:3001/api/auth/userProfile",
+            `${import.meta.env.VITE_API_BASE_URL}/auth/userProfile`,
             {
               headers: {
                 "Content-Type": "application/json",

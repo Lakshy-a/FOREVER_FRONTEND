@@ -9,7 +9,7 @@ const LatestCoection = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/products/allProduct")
+      .get(`${import.meta.env.VITE_API_BASE_URL}/products/allProduct`)
       .then((response) =>
         setLatestCollection(
           response.data.data.filter(

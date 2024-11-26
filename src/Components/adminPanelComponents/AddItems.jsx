@@ -75,9 +75,13 @@ const AddItems = () => {
       formData.append("productImages", image);
     });
 
+    // for (let [key, value] of formData.entries()) {
+    //   console.log(`${key}:`, value);
+    // }
+
     try {
       let response = await axios.post(
-        "http://localhost:3001/api/products/addProduct",
+        `${import.meta.env.VITE_API_BASE_URL}/products/addProduct`,
         formData,
         {
           headers: {

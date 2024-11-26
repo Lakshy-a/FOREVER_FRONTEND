@@ -23,7 +23,7 @@ const ProductDescription = ({ product }) => {
     images = [],
     stockQuantity = 0,
     productDescription = "No description available.",
-    availableSizes = [],
+    availableSizes,
     reviews,
     averageRating,
   } = product;
@@ -33,13 +33,14 @@ const ProductDescription = ({ product }) => {
     ? availableSizes
     : JSON.parse(availableSizes || "[]");
 
-  const productSizes = [];
-  productSizes[0] = parsedSizes[2];
-  productSizes[1] = parsedSizes[6];
-  productSizes[2] = parsedSizes[10];
+  // const productSizes = [];
+  // productSizes[0] = parsedSizes[2];
+  // productSizes[1] = parsedSizes[6];
+  // productSizes[2] = parsedSizes[10];
 
   useEffect(() => {
-    console.log("Product", product);
+    console.log("Parsed Sizes", typeof parsedSizes[0]);
+    // parsedSizes[0].map((item, index) => console.log(item))
   });
 
   // Handle Add to Cart
@@ -65,10 +66,13 @@ const ProductDescription = ({ product }) => {
 
     axios
       .post(
-        "http://localhost:3001/api/cart/addToCart",
-        { productData, quantity: 1 },
+      `${import.meta.env.VITE_API_BASE_URL}/cart/addToCart`,
+        { productData },
         {
-          withCredentials: true,
+         headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          },
         }
       )
       .then((response) => console.log(response))
