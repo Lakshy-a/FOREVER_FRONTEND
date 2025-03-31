@@ -11,7 +11,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/products/productsById/${id}`)
+      .get(`${import.meta.env.VITE_API_BASE_URL}/products/productsById/${id}`)
       .then((response) => {
         setProduct(response.data.data);
       })

@@ -8,7 +8,7 @@ const ListItems = () => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/api/products/allProduct",
+        `${import.meta.env.VITE_API_BASE_URL}/products/allProduct`,
         { withCredentials: true }
       );
       const products = response.data.data;
@@ -28,13 +28,13 @@ const ListItems = () => {
     try {
       if (product.isDeleted) {
         await axios.post(
-          `http://localhost:3001/api/products/restoreProduct/${product._id}`,
+          `${import.meta.env.VITE_API_BASE_URL}/products/restoreProduct/${product._id}`,
           {},
           { withCredentials: true }
         );
       } else {
         await axios.delete(
-          `http://localhost:3001/api/products/deleteProduct/${product._id}`,
+          `${import.meta.env.VITE_API_BASE_URL}/products/deleteProduct/${product._id}`,
           { withCredentials: true }
         );
       }

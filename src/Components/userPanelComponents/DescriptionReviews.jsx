@@ -14,6 +14,7 @@ const DescriptionReviews = ({ id }) => {
   const [selectedRating, setSelectedRating] = useState();
   const [hoveredRating, setHoveredRating] = useState(0); // New hover state
   const [reviewComment, setReviewComment] = useState(""); // State for the comment
+  const [isLoggedIn, setIsLoggedIn] = useState("");
 
   const handleDescriptionClick = () => {
     setDescription(true);
@@ -27,11 +28,14 @@ const DescriptionReviews = ({ id }) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/api/reviews/getReviewsByProduct/${id}`, {
+      .get(`${import.meta.env.VITE_API_BASE_URL}/reviews/getReviewsByProduct/${id}`, {
         withCredentials: true,
       })
       .then((response) => {
         console.log(response.data.data);
+        const accessToken = sessionStorage.getItem("accessToken");
+        console.log(accessToken);
+        setIsLoggedIn(accessToken);
         setReviewsCount(response.data.data.length);
         setReviewText(response.data.data);
       })
@@ -61,7 +65,7 @@ const DescriptionReviews = ({ id }) => {
       };
 
       axios
-        .post("http://localhost:3001/api/reviews/addReview", newReview, {
+        .post(`${import.meta.env.VITE_API_BASE_URL}/reviews/addReview`, newReview, {
           withCredentials: true,
         })
         .then((response) => {
@@ -130,7 +134,7 @@ const DescriptionReviews = ({ id }) => {
                 className="mt-4 border border-gray-300 p-4 text-gray-900 font-semibold flex gap-4 justify-start items-center"
               >
                 <div className="h-10 w-10 flex justify-center items-center font-bold text-lg  bg-black rounded-full text-white">
-                  {review.userId.name[0].toUpperCase()}
+                  {review.userId?.name[0].toUpperCase()}
                 </div>
                 <div>
                   <div className="flex items-center mb-2 gap-2">
@@ -185,12 +189,16 @@ const DescriptionReviews = ({ id }) => {
         <div
           className={`w-full flex justify-end ${reviews ? "block" : "hidden"}`}
         >
-          <button
-            className="mt-4 px-4 py-2 rounded-full cursor-pointer font-semibold hover:bg-white hover:text-black hover:border border-gray-900  w-fit bg-black text-white"
-            onClick={handleAddReview}
-          >
-            {addReview ? "Post Review" : "Write a Review"}
-          </button>
+          {isLoggedIn ? (
+            <button
+              className="mt-4 px-4 py-2 rounded-full cursor-pointer font-semibold hover:bg-white hover:text-black hover:border border-gray-900  w-fit bg-black text-white"
+              onClick={handleAddReview}
+            >
+              {addReview ? "Post Review" : "Write a Review"}
+            </button>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </>

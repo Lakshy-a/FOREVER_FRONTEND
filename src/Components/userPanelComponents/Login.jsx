@@ -30,16 +30,13 @@ const Login = () => {
 
   const handleClick = async (data) => {
     await axios
-      .post("http://localhost:3001/api/auth/login", data, {
-        withCredentials: true,
-      })
+      .post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, data)
       .then((response) => {
-        // console.log(data)
-        localStorage.setItem('isLoggedIn', JSON.stringify(true));
+        sessionStorage.setItem("accessToken", response.data.data);
         dispatch(loggedIn());
         navigate("/");
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
     reset();
   };
 

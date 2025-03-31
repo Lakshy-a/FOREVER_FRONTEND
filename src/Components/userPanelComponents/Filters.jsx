@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   addCategory,
   removeCategory,
@@ -13,6 +13,8 @@ const Filters = ({ item }) => {
   const selectedSubCategories = useSelector(
     (state) => state.filter.subCategories
   );
+  const products = useSelector((state) => state.products.newProducts);
+  const [fetchedData, setFetchedData] = useState(products);
 
   const handleCategoryClick = (value) => {
     if (selectedCategories.includes(value)) {

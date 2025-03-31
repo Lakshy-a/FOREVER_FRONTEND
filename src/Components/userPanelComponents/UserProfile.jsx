@@ -6,7 +6,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/auth/userProfile", {
+      .get(`${import.meta.env.VITE_API_BASE_URL}/auth/userProfile`, {
         withCredentials: true,
       })
       .then((response) => {

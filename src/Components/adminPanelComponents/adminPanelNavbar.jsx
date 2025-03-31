@@ -8,7 +8,7 @@ const adminPanelNavbar = () => {
 
   const handleLogout = async () => {
     const response = await axios.post(
-      "http://localhost:3001/api/admin/adminLogout",
+      `${import.meta.env.VITE_API_BASE_URL}/admin/adminLogout`,
       {},
       { withCredentials: true }
     );

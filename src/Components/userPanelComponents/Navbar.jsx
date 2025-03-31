@@ -42,11 +42,18 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:3001/api/auth/logout",
+        `${import.meta.env.VITE_API_BASE_URL}/auth/logout`,
         {},
-        { withCredentials: true }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          },
+        }
       );
-      localStorage.setItem("isLoggedIn", JSON.stringify(false));
+      console.log("Logout Clicked");
+      sessionStorage.removeItem("accessToken");
+      console.log(sessionStorage.getItem("accessToken"));
       dispatch(loggedOut());
       setIsUser("");
       navigate("/");
@@ -56,13 +63,30 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/api/auth/userProfile", {
-        withCredentials: true,
-      })
-      .then((response) => setIsUser(response.data.data.name[0]))
-      .catch((error) => console.log(error));
-  }, [logged]);
+    const fetchUserProfile = async () => {
+      const accessToken = sessionStorage.getItem("accessToken");
+      if (accessToken) {
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/auth/userProfile`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          setIsUser(response.data.data);
+        } catch (error) {
+          console.log("Error fetching user profile:", error);
+        }
+      } else {
+        setIsUser(""); // Clear the user if no access token is found
+      }
+    };
+
+    fetchUserProfile();
+  }, [logged]); // Dependency on 'logged'
 
   return (
     <nav className="w-full py-4 flex justify-between relative z-10 custom-padding border-b border-gray-200">
@@ -106,7 +130,7 @@ const Navbar = () => {
               } w-6 h-6 xs:w-8 xs:h-8 rounded-full text-white flex justify-center items-center font-semibold text-base`}
             >
               {isUser ? (
-                isUser[0].toUpperCase()
+                isUser.name[0].toUpperCase()
               ) : (
                 <img src={profile_icon} className="w-5" alt="profile" />
               )}
