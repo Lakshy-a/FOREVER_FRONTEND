@@ -1,12 +1,18 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setDarkMode, toggleDarkMode } from "../../slices/darkMode/darkMode.js";
 
 const SubscribeNow = () => {
+  const dispatch = useDispatch();
+
+  const isDark = useSelector((state) => state.dark.darkMode)
+
   return (
-    <div className="px-4 xs:custom-padding xs:mt-28 mt-20">
-      <h2 className="text-2xl font-semibold text-center">
+    <div className={`${isDark ? "bg-gray-950" : ""} `}>
+      <h2 className={`${isDark ? "text-gray-100" : "text-gray-400"} text-2xl font-semibold text-center`}>
         Subscribe now & get 20% off
       </h2>
-      <div className="mt-3 text-center text-gray-400">
+      <div className={`${isDark ? "text-gray-100" : "text-gray-400"} mt-3 text-center `}>
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry.
       </div>

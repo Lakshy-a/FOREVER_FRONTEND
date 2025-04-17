@@ -9,11 +9,19 @@ const AddItems = () => {
   const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm(); // Access reset from useForm
   const sizeArray = ["S", "M", "L", "XL", "XXL"];
-  const colorsArray = ["black", "red", "blue", "yellow", "white"];
+  const colorsArray = ["bg-black", "bg-red-600", "bg-blue-600", "bg-yellow-500", "bg-white", "bg-green-600", "bg-purple-700", "bg-pink-600"];
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([null, null, null, null]);
   const [productImages, setImages] = useState([]); // Array to store the image files
+
+  const colorMap = {
+    black: "bg-black-500",
+    red: "bg-red-500",
+    blue: "bg-blue-500",
+    yellow: "bg-yellow-500",
+    white: "bg-white-500",
+  }
 
   // function to handle the selected sizes
   const handleSizeSelected = (size) => {
@@ -52,6 +60,7 @@ const AddItems = () => {
 
   // function to handle on submit
   const onSubmit = async (data) => {
+    console.log("Data", data);
     const formData = new FormData();
 
     // Append form data fields
@@ -78,22 +87,22 @@ const AddItems = () => {
     // for (let [key, value] of formData.entries()) {
     //   console.log(`${key}:`, value);
     // }
-
+    console.log("Called", formData);
     try {
-      let response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/products/addProduct`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // let response = await axios.post(
+      //   `${import.meta.env.VITE_API_BASE_URL}/products/addProduct`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
       reset();
       setSelectedSizes([]);
       setImagePreviews([null, null, null, null]);
       setImages([]);
-      console.log(formData);
+
       alert("Product added to db successfully...");
     } catch (error) {
       if (error.response.data.error === "Product already exist")
@@ -102,32 +111,6 @@ const AddItems = () => {
       console.error("Error uploading product:", error);
     }
   };
-  // const onSubmit = async (data) => {
-  //      const formData = new FormData();
-
-  //      // Append form data fields
-  //      formData.append("productName", data.productName);
-  //      formData.append("productDescription", data.productDescription);
-  //      formData.append("productCategory", data.productCategory);
-  //      formData.append("productSubCategory", data.productSubCategory);
-  //      formData.append("productPrice", data.productPrice);
-  //      formData.append("productDiscountedPrice", data.productDiscountedPrice);
-  //      formData.append("stockQuantity", data.stockQuantity);
-  //      formData.append("isBestseller", data.isBestseller || false);
-  //      formData.append("isNewCollection", data.isNewCollection || false);
-  //      formData.append("isFeatured", data.isFeatured || false);
-
-  //      // Append selected sizes and colors as JSON strings
-  //      formData.append("availableSizes", JSON.stringify(selectedSizes));
-  //      formData.append("availableColors", JSON.stringify(selectedColors));
-
-  //      // Append each image to formData
-  //      productImages.forEach((image, index) => {
-  //        formData.append("productImages", image);
-  //      });
-
-  //      console.log(formData)
-  // }
 
   return (
     <>
@@ -282,9 +265,8 @@ const AddItems = () => {
             {sizeArray.map((size) => (
               <div
                 key={size}
-                className={`${
-                  selectedSizes.includes(size) ? "bg-pink-200" : "bg-gray-300"
-                } px-2 py-1 cursor-pointer`}
+                className={`${selectedSizes.includes(size) ? "bg-pink-200" : "bg-gray-300"
+                  } w-10 text-center px-2 py-1 cursor-pointer`}
                 onClick={() => handleSizeSelected(size)}
               >
                 {size}
@@ -298,19 +280,13 @@ const AddItems = () => {
           <label className="text-gray-500 font-medium" htmlFor="sizes">
             Available Colors
           </label>
-          <div id="sizes" className="flex gap-4 mt-2">
-            l
+          <div id="sizes" className="flex gap-3 mt-2">
             {colorsArray.map((color) => (
               <div
                 key={color}
-                className={`${
-                  selectedSizes.includes(color)
-                    ? `bg-${color}-700`
-                    : "bg-gray-300"
-                } py-1 px-2 cursor-pointer`}
+                className={`${color} p-3 rounded-full border-gray-950 border-2  cursor-pointer`}
                 onClick={() => handleColorSelected(color)}
               >
-                {color}
               </div>
             ))}
           </div>
@@ -356,8 +332,8 @@ const AddItems = () => {
 
         {/* button  */}
         <div className="mt-6">
-          <button
-            onClick={handleSubmit(onSubmit)}
+          <button type="submit"
+            // onClick={handleSubmit(onSubmit)}
             className="bg-black text-white px-10 py-2 hover:bg-white hover:text-black hover:border border-black"
           >
             ADD

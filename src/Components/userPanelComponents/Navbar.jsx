@@ -11,6 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { openSearchBar } from "../../slices/searchBar/searchBarSlice";
 import axios from "axios";
 import { loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
+import { MdOutlineDarkMode } from "react-icons/md";
+import { MdLightMode } from "react-icons/md";
+import { setDarkMode, toggleDarkMode } from "../../slices/darkMode/darkMode.js";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -18,6 +21,8 @@ const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isUser, setIsUser] = useState("");
   const cartCount = useSelector((state) => state.cart.cartCount);
+
+  const isDark = useSelector((state) => state.dark.darkMode)
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -61,6 +66,10 @@ const Navbar = () => {
       console.log(error);
     }
   };
+
+  const handledarkMode = () => {
+    dispatch(toggleDarkMode())
+  }
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -119,6 +128,12 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex items-center gap-4 sm:gap-6">
+        {/* dark mode */}
+        <div className="text-2xl cursor-pointer" onClick={handledarkMode}>
+          {isDark ? <MdLightMode /> :
+            <MdOutlineDarkMode />}
+        </div>
+
         <div onClick={handleSearchClick}>
           <img src={search_icon} className="w-5 cursor-pointer" alt="search" />
         </div>

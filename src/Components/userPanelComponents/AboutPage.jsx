@@ -3,20 +3,26 @@ import SubscribeNow from "./SubscribeNow";
 import WhyChooseUs from "./WhyChooseUs";
 import { GoHorizontalRule } from "react-icons/go";
 import about_img from "../../assets/frontend_assets/about_img.png";
+import { useDispatch, useSelector } from "react-redux";
+import { setDarkMode, toggleDarkMode } from "../../slices/darkMode/darkMode.js";
 
 const AboutPage = () => {
+  const dispatch = useDispatch();
+
+  const isDark = useSelector((state) => state.dark.darkMode)
+
   return (
-    <div className="custom-padding">
-      <div className="uppercase text-2xl text-gray-400 font-semibold flex items-center justify-center mt-8">
-        About <span className="text-black ml-2">Us</span>
-        <span className="text-black ml-2">
+    <div className={`${isDark ? "bg-gray-950" : ""} custom-padding`}>
+      <div className={`${isDark ? "text-gray-100" : "text-gray-400"} uppercase text-2xl  font-semibold flex items-center justify-center mt-8`}>
+        About <span className={`${isDark ? "text-gray-100" : "text-black"} ml-2 `}>Us </span>
+        <span className={`${isDark ? "text-gray-100" : "text-black "} ml-2`}>
           <GoHorizontalRule />
         </span>
       </div>
       <div className="mt-12 xs:flex md:gap-12 lg:gap-20 justify-center">
         <img src={about_img} className="w-[450px]" alt="About Us" />
         <div>
-          <div className="mt-8 text-gray-600">
+          <div className={`${isDark ? "text-gray-200" : "text-gray-600"} mt-8`}>
             <p>
               Forever was born out of a passion for innovation and a desire to
               revolutionize the way people shop online. Our journey began with
@@ -33,8 +39,8 @@ const AboutPage = () => {
             </p>
           </div>
           <div className="mt-4">
-            <h3 className="text-xl font-semibold">Our Mission</h3>
-            <p className="mt-4">
+            <h3 className={`${isDark ? "text-gray-100" : "text-gray-600"} text-xl font-semibold`}>Our Mission</h3>
+            <p className={`${isDark ? "text-gray-100" : "text-gray-600"} mt-4`}>
               Our mission at Forever is to empower customers with choice,
               convenience, and confidence. We're dedicated to providing a
               seamless shopping experience that exceeds expectations, from

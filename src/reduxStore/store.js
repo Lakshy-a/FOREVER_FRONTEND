@@ -4,6 +4,7 @@ import searchBarReducer from "../slices/searchBar/searchBarSlice";
 import cartReducer from "../slices/cartData/cartSlice";
 import filterReducer from "../slices/filterData/filterSlice";
 import isLoggedReducer from "../slices/isLoggedIn/loggedInSlice.js";
+import darkModeReducer from "../slices/darkMode/darkMode.js";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     cart: cartReducer,
     filter: filterReducer,
     loggedIn: isLoggedReducer,
+    dark: darkModeReducer,
   },
 });
