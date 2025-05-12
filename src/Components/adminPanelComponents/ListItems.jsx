@@ -61,10 +61,10 @@ const ListItems = () => {
           <div className="w-[130px] font-semibold">Status</div>
           <div className="w-[130px] font-semibold">Action</div>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 flex flex-col ">
           {allProducts.map((product) => (
             <div
-              className="flex mt-3 border border-gray-400 rounded-md overflow-hidden"
+              className="flex mt-3 border border-gray-400 rounded-md overflow-hidden "
               key={product._id}
             >
               <div className="w-[130px]">
@@ -84,16 +84,14 @@ const ListItems = () => {
                 ${product.productDiscountedPrice}
               </div>
               <div
-                className={`w-[130px] text-sm font-semibold ${
-                  product.isDeleted ? "text-red-600" : "text-green-600"
-                } flex items-center`}
+                className={`w-[130px] text-sm font-semibold ${product.isDeleted ? "text-red-600" : "text-green-600"
+                  } flex items-center`}
               >
                 {product.isDeleted ? "Draft" : "Active"}
               </div>
               <div
-                className={`w-[130px] flex items-center justify-center text-xl font-semibold text-gray-500 cursor-pointer ${
-                  product.isDeleted ? "text-green-600" : "text-red-600"
-                }`}
+                className={`w-[130px] flex items-center justify-center text-xl font-semibold text-gray-500 cursor-pointer ${product.isDeleted ? "text-green-600" : "text-red-600"
+                  }`}
                 onClick={() => handleRemove(product)}
               >
                 {product.isDeleted ? <MdRestore /> : <MdDelete />}
@@ -127,16 +125,14 @@ const ListItems = () => {
               </div>
               <div className="flex justify-between items-center pr-2 my-2">
                 <div
-                  className={`w-[130px] text-sm font-semibold px-2  ${
-                    product.isDeleted ? "text-red-600" : "text-green-600"
-                  } flex items-center`}
+                  className={`w-[130px] text-sm font-semibold px-2  ${product.isDeleted ? "text-red-600" : "text-green-600"
+                    } flex items-center`}
                 >
                   {product.isDeleted ? "Draft" : "Active"}
                 </div>
                 <div
-                  className={`w-fit xs:w-[130px] text-xl font-semibold text-gray-500 cursor-pointer ${
-                    product.isDeleted ? "text-green-600" : "text-red-600"
-                  }`}
+                  className={`w-fit xs:w-[130px] text-xl font-semibold text-gray-500 cursor-pointer ${product.isDeleted ? "text-green-600" : "text-red-600"
+                    }`}
                   onClick={() => handleRemove(product)}
                 >
                   {product.isDeleted ? <MdRestore /> : <MdDelete />}
