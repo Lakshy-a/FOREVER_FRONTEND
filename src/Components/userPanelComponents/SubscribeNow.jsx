@@ -8,7 +8,7 @@ const SubscribeNow = () => {
   const isDark = useSelector((state) => state.dark.darkMode)
 
   return (
-    <div className={`${isDark ? "bg-gray-950" : ""} `}>
+    <div className={`${isDark ? "bg-gray-950" : ""} mt-12 px-8 xs:px-0 `}>
       <h2 className={`${isDark ? "text-gray-100" : "text-gray-400"} text-2xl font-semibold text-center`}>
         Subscribe now & get 20% off
       </h2>

@@ -151,11 +151,11 @@ const Navbar = () => {
               )}
             </div>
 
-            <div className="w-fit h-fit rounded-md border border-black absolute top-9 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 flex flex-col gap-2 text-sm font-semibold overflow-hidden">
+            <div className="w-fit h-fit rounded-md border border-black absolute top-8  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 flex flex-col gap-2 text-sm font-semibold overflow-hidden">
               {isUser ? (
                 <>
                   <NavLink to={"/profile"}>
-                    <div className="cursor-pointer hover:bg-black hover:text-white px-4 py-1">
+                    <div className="cursor-pointer hover:bg-black hover:text-white px-4">
                       Profile
                     </div>
                   </NavLink>
