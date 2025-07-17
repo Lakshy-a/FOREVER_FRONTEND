@@ -11,12 +11,12 @@ const Footer = () => {
   const isDark = useSelector((state) => state.dark.darkMode)
 
   return (
-    <div className={`${isDark ? "bg-gray-950" : ""} px-4 md:px-4 lg:px-28 xs:flex justify-between mt-10 xs:mt-20`}>
+    <div className={` px-4 md:px-4 lg:px-28 xs:flex justify-between mt-10 xs:mt-20`}>
       <div>
         <div>
           <img src={logo} className="w-36 cursor-pointer" alt="logo" />
         </div>
-        <p className={`${isDark ? "text-gray-200" : "text-gray-700"} text-sm mt-3  xs:w-96 xs:text-start`}>
+        <p className={` text-sm mt-3  xs:w-96 xs:text-start`}>
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
           since the 1500s, when an unknown printer took a galley of type and
@@ -24,8 +24,8 @@ const Footer = () => {
         </p>
       </div>
       <div>
-        <div className={`${isDark ? "text-gray-200" : "text-gray-700"} uppercase text-xl font-semibold mt-10 xs:mt-0`}>Company</div>
-        <ul className={`${isDark ? "text-gray-200" : "text-gray-700"} mt-4 text-sm font-normal`}>
+        <div className={` uppercase text-xl font-semibold mt-10 xs:mt-0`}>Company</div>
+        <ul className={` mt-4 text-sm font-normal`}>
           <NavLink to="/"><li className="mt-1 cursor-pointer">Home</li></NavLink>
           <NavLink to="/about"><li className="mt-1 cursor-pointer">About Us</li></NavLink>
           <NavLink to="deliveryPolicy"><li className="mt-1 cursor-pointer">Delivery</li></NavLink>
@@ -33,8 +33,8 @@ const Footer = () => {
         </ul>
       </div>
       <div>
-        <div className={`${isDark ? "text-gray-200" : "text-gray-700"} uppercase text-xl font-semibold mt-10 xs:mt-0`}>Get In Touch</div>
-        <ul className={`${isDark ? "text-gray-200" : "text-gray-700"} mt-4 text-sm font-normal`}>
+        <div className={` uppercase text-xl font-semibold mt-10 xs:mt-0`}>Get In Touch</div>
+        <ul className={` mt-4 text-sm font-normal`}>
           <li className="mt-1">+1-000-000-0000</li>
           <li className="mt-1 cursor-pointer">forever@gmail.com</li>
           <li className="mt-1 cursor-pointer">Instagram</li>

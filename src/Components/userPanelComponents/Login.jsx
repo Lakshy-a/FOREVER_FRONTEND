@@ -44,7 +44,7 @@ const Login = () => {
     <>
       <div className="w-full h-96 flex flex-col items-center justify-center">
         <div className=" text-3xl flex items-center text-black font-serif">
-          Sign In
+          Log In
           <span className="text-black ml-2">
             <GoHorizontalRule />
           </span>

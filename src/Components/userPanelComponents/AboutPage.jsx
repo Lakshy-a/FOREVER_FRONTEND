@@ -12,17 +12,17 @@ const AboutPage = () => {
   const isDark = useSelector((state) => state.dark.darkMode)
 
   return (
-    <div className={`${isDark ? "bg-gray-950" : ""} custom-padding`}>
-      <div className={`${isDark ? "text-gray-100" : "text-gray-400"} uppercase text-2xl  font-semibold flex items-center justify-center mt-8`}>
-        About <span className={`${isDark ? "text-gray-100" : "text-black"} ml-2 `}>Us </span>
-        <span className={`${isDark ? "text-gray-100" : "text-black "} ml-2`}>
+    <div className={` custom-padding`}>
+      <div className={` uppercase text-2xl  font-semibold flex items-center justify-center mt-8`}>
+        About <span className={` ml-2 `}>Us </span>
+        <span className={` ml-2`}>
           <GoHorizontalRule />
         </span>
       </div>
       <div className="mt-12 xs:flex md:gap-12 lg:gap-20 justify-center">
         <img src={about_img} className="w-[450px]" alt="About Us" />
         <div>
-          <div className={`${isDark ? "text-gray-200" : "text-gray-600"} mt-8`}>
+          <div className={` mt-8`}>
             <p>
               Forever was born out of a passion for innovation and a desire to
               revolutionize the way people shop online. Our journey began with
@@ -39,8 +39,8 @@ const AboutPage = () => {
             </p>
           </div>
           <div className="mt-4">
-            <h3 className={`${isDark ? "text-gray-100" : "text-gray-600"} text-xl font-semibold`}>Our Mission</h3>
-            <p className={`${isDark ? "text-gray-100" : "text-gray-600"} mt-4`}>
+            <h3 className={` text-xl font-semibold`}>Our Mission</h3>
+            <p className={` mt-4`}>
               Our mission at Forever is to empower customers with choice,
               convenience, and confidence. We're dedicated to providing a
               seamless shopping experience that exceeds expectations, from

@@ -8,11 +8,11 @@ const SubscribeNow = () => {
   const isDark = useSelector((state) => state.dark.darkMode)
 
   return (
-    <div className={`${isDark ? "bg-gray-950" : ""} mt-12 px-8 xs:px-0 `}>
-      <h2 className={`${isDark ? "text-gray-100" : "text-gray-400"} text-2xl font-semibold text-center`}>
+    <div className={`mt-12 px-8 xs:px-0 `}>
+      <h2 className={` text-2xl font-semibold text-center`}>
         Subscribe now & get 20% off
       </h2>
-      <div className={`${isDark ? "text-gray-100" : "text-gray-400"} mt-3 text-center `}>
+      <div className={`mt-3 text-center `}>
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry.
       </div>
