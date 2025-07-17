@@ -38,7 +38,7 @@ const LatestCoection = () => {
         </p>
         <div className="grid grid-cols-2 gap-4 mt-4 md:grid-cols-3 lg:grid-cols-5 ">
           {latestCollection.map((product) => (
-            <SingleProduct key={product.id} product={product} />
+            <SingleProduct key={product._id} product={product} />
           ))}
         </div>
       </div>

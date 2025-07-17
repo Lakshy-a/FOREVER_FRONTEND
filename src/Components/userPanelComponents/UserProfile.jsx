@@ -5,9 +5,13 @@ const UserProfile = () => {
   const [userData, setUserData] = useState(null); // Initialize with null
 
   useEffect(() => {
+    const token = sessionStorage.getItem("token");
+
     axios
       .get(`${import.meta.env.VITE_API_BASE_URL}/auth/userProfile`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       })
       .then((response) => {
         console.log(response.data.data)
@@ -28,7 +32,7 @@ const UserProfile = () => {
       </div>
       <div className="w-full flex flex-col items-start">
         <div>Your Contact Details</div>
-       <div> Phone- {userData.phone}, Email- {userData.email} </div>
+        <div> Phone- {userData.phone}, Email- {userData.email} </div>
       </div>
     </div>
   );
