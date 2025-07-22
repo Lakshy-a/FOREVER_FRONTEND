@@ -24,13 +24,14 @@ const Login = () => {
   });
 
   const handleClick = async (data) => {
-    console.log(data);
-    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/admin/adminLogin`, data, {
-      withCredentials: true, // Include cookies in requests
-    });
-    
-    if(response.data.message === "Admin Login Successful")
-      navigate("/adminPanelHomePage/*");
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/admin/adminLogin`, data)
+      .then((response) => {
+        console.log(response)
+        localStorage.setItem("accessToken", response.data.data);
+        if (response.data.message === "Admin Login Successful")
+          navigate("/adminPanelHomePage/*");
+      })
+      .catch((error) => console.log(error));
 
     reset();
   };
@@ -45,7 +46,7 @@ const Login = () => {
           </span>
         </div>
         <form className="mt-6 flex flex-col gap-5">
-        
+
           <input
             className="border py-2 outline-none px-4 text-base w-72 xs:w-[390px] border-black"
             type="text"
