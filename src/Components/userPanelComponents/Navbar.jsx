@@ -20,7 +20,7 @@ const Navbar = () => {
   const logged = useSelector((state) => state.loggedIn.isLoggedIn);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isUser, setIsUser] = useState("");
-  const cartCount = useSelector((state) => state.cart.cartCount);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   const isDark = useSelector((state) => state.dark.darkMode)
 
@@ -52,13 +52,11 @@ const Navbar = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       );
-      console.log("Logout Clicked");
-      sessionStorage.removeItem("accessToken");
-      console.log(sessionStorage.getItem("accessToken"));
+      localStorage.removeItem("accessToken");
       dispatch(loggedOut());
       setIsUser("");
       navigate("/");
@@ -73,7 +71,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const accessToken = sessionStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
         try {
           const response = await axios.get(
@@ -187,7 +185,7 @@ const Navbar = () => {
           <div className="relative">
             <img src={cart_icon} className="w-5 cursor-pointer" alt="cart" />
             <div className="absolute top-3 left-3 bg-black rounded-full px-1 text-xs text-white font-semibold">
-              {cartCount}
+              {cartItems.length}
             </div>
           </div>
         </NavLink>

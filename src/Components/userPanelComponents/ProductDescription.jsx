@@ -28,22 +28,15 @@ const ProductDescription = ({ product }) => {
     averageRating,
   } = product;
 
-  // Ensure availableSizes is an array of strings
   const parsedSizes = Array.isArray(availableSizes)
     ? availableSizes
     : JSON.parse(availableSizes || "[]");
 
-  // const productSizes = [];
-  // productSizes[0] = parsedSizes[2];
-  // productSizes[1] = parsedSizes[6];
-  // productSizes[2] = parsedSizes[10];
-
   useEffect(() => {
-    console.log("Parsed Sizes", typeof parsedSizes[0]);
+    // console.log("Parsed Sizes", typeof parsedSizes[0]);
     // parsedSizes[0].map((item, index) => console.log(item))
   });
 
-  // Handle Add to Cart
   const handleAddToCart = () => {
     if (!logged) {
       toast.error("You need to log in first!");
@@ -66,16 +59,15 @@ const ProductDescription = ({ product }) => {
 
     axios
       .post(
-      `${import.meta.env.VITE_API_BASE_URL}/cart/addToCart`,
+        `${import.meta.env.VITE_API_BASE_URL}/cart/addToCart`,
         { productData },
         {
-         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       )
-      .then((response) => console.log(response))
+      .then((response) => console.log("Add to cart success"))
       .catch((error) => console.error(error));
 
     dispatch(increment(productData));
@@ -124,11 +116,10 @@ const ProductDescription = ({ product }) => {
               <li
                 key={index}
                 onClick={() => handleSizeClick(size)}
-                className={`border px-3 py-1 cursor-pointer ${
-                  selectedSize === size
-                    ? "border-red-500 bg-red-100 text-red-600"
-                    : "border-gray-200 bg-slate-200"
-                }`}
+                className={`border px-3 py-1 cursor-pointer ${selectedSize === size
+                  ? "border-red-500 bg-red-100 text-red-600"
+                  : "border-gray-200 bg-slate-200"
+                  }`}
               >
                 {size}
               </li>

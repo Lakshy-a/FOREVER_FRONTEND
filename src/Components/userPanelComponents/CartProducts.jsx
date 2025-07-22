@@ -15,12 +15,11 @@ const CartProducts = () => {
     axios
       .get(`${import.meta.env.VITE_API_BASE_URL}/cart/getUsersCart`, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       })
       .then((response) => {
-        console.log(response);
+        console.log("Get user cart success");
       })
       .catch((error) => {
         console.error(error);

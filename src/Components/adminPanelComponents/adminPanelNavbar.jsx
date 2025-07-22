@@ -7,14 +7,21 @@ const adminPanelNavbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
+    const accessToken = localStorage.getItem("accessToken"); // or however you're storing it
+
     const response = await axios.post(
       `${import.meta.env.VITE_API_BASE_URL}/admin/adminLogout`,
       {},
-      { withCredentials: true }
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // 👈 add this line
+        },
+      }
     );
 
     if (response.data.message === "Admin Logout Successful")
-      navigate("/adminPanelLogin");
+      localStorage.removeItem("accessToken");
+    navigate("/adminPanelLogin");
   };
 
   return (

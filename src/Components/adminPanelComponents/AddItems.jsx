@@ -60,7 +60,6 @@ const AddItems = () => {
 
   // function to handle on submit
   const onSubmit = async (data) => {
-    console.log("Data", data);
     const formData = new FormData();
 
     // Append form data fields
@@ -84,20 +83,22 @@ const AddItems = () => {
       formData.append("productImages", image);
     });
 
-    // for (let [key, value] of formData.entries()) {
-    //   console.log(`${key}:`, value);
-    // }
-    console.log("Called", formData);
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
     try {
-      // let response = await axios.post(
-      //   `${import.meta.env.VITE_API_BASE_URL}/products/addProduct`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
+      const accessToken = sessionStorage.getItem("accessToken"); // or however you're storing it
+
+      let response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/products/addProduct`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authorization: `Bearer ${accessToken}`, // 👈 add this line
+          },
+        }
+      );
       reset();
       setSelectedSizes([]);
       setImagePreviews([null, null, null, null]);

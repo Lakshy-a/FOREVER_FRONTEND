@@ -28,14 +28,14 @@ const DescriptionReviews = ({ id }) => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_API_BASE_URL}/reviews/getReviewsByProduct/${id}`, {
-        withCredentials: true,
-      })
+      .get(`${import.meta.env.VITE_API_BASE_URL}/reviews/getReviewsByProduct/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        })
       .then((response) => {
-        console.log(response.data.data);
-        const accessToken = sessionStorage.getItem("accessToken");
-        console.log(accessToken);
-        setIsLoggedIn(accessToken);
+        // setIsLoggedIn(accessToken);
         setReviewsCount(response.data.data.length);
         setReviewText(response.data.data);
       })
@@ -65,12 +65,13 @@ const DescriptionReviews = ({ id }) => {
       };
 
       axios
-        .post(`${import.meta.env.VITE_API_BASE_URL}/reviews/addReview`, newReview, {
-          withCredentials: true,
-        })
+        .post(`${import.meta.env.VITE_API_BASE_URL}/reviews/addReview`, newReview,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          })
         .then((response) => {
-          console.log(response);
-          // Reset states after successful review posting
           setAddReview(false);
           setReviewComment("");
           setSelectedRating(0);
@@ -86,9 +87,8 @@ const DescriptionReviews = ({ id }) => {
       <div className="flex">
         {/* Description */}
         <div
-          className={`border border-b-0 border-gray-300 border-r-0 px-4 py-2 cursor-pointer text-sm ${
-            description ? "font-bold" : "text-gray-500"
-          }`}
+          className={`border border-b-0 border-gray-300 border-r-0 px-4 py-2 cursor-pointer text-sm ${description ? "font-bold" : "text-gray-500"
+            }`}
           onClick={handleDescriptionClick}
         >
           Description
@@ -96,9 +96,8 @@ const DescriptionReviews = ({ id }) => {
 
         {/* Reviews */}
         <div
-          className={`cursor-pointer border border-b-0 border-gray-300 px-4 py-2 text-sm ${
-            reviews ? "font-bold" : "text-gray-500"
-          }`}
+          className={`cursor-pointer border border-b-0 border-gray-300 px-4 py-2 text-sm ${reviews ? "font-bold" : "text-gray-500"
+            }`}
           onClick={handleReviewsClick}
         >
           Reviews ( {reviewsCount} )
@@ -147,9 +146,8 @@ const DescriptionReviews = ({ id }) => {
           )}
         </div>
         <div
-          className={`${
-            addReview && reviews ? "block" : "hidden"
-          } mt-4 border border-gray-300 p-4 text-gray-900 flex flex-col gap-1 font-semibold`}
+          className={`${addReview && reviews ? "block" : "hidden"
+            } mt-4 border border-gray-300 p-4 text-gray-900 flex flex-col gap-1 font-semibold`}
         >
           <div className="flex gap-2">
             Rating :{" "}
@@ -168,11 +166,10 @@ const DescriptionReviews = ({ id }) => {
                     onChange={() => setSelectedRating(index + 1)}
                   />
                   <FaStar
-                    className={`cursor-pointer ${
-                      index + 1 <= (hoveredRating || selectedRating)
-                        ? "text-yellow-500"
-                        : "text-gray-300"
-                    }`}
+                    className={`cursor-pointer ${index + 1 <= (hoveredRating || selectedRating)
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                      }`}
                   />
                 </label>
               ))}

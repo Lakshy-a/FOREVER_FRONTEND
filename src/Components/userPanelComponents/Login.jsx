@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { GoHorizontalRule } from "react-icons/go";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { loggedIn, loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
+import { setCart } from "../../slices/cartData/cartSlice";
 
 let signInSchema = object({
   email: string().email("Invalid email").required("Email is required"),
@@ -17,7 +18,10 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const logged = useSelector((state) => state.loggedIn.isLoggedIn);
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const [isLoggedIn, setIsLoggedIn] = useState(logged);
+  const [cartData, setCartData] = useState([]);
+  const [userEmail, setUserEmail] = useState("");
 
   const {
     register,
@@ -32,13 +36,35 @@ const Login = () => {
     await axios
       .post(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, data)
       .then((response) => {
-        sessionStorage.setItem("accessToken", response.data.data);
+        localStorage.setItem("accessToken", response.data.data);
         dispatch(loggedIn());
+        setUserEmail(data.email);
         navigate("/");
       })
       .catch((error) => console.log(error));
     reset();
   };
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/cart/getUsersCart`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
+        dispatch(setCart(response.data.data.products)); 
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (logged) {
+      fetchCart();
+    }
+  }, [logged])
 
   return (
     <>
