@@ -18,9 +18,9 @@ const cartSlice = createSlice({
       );
 
       if (existingProduct) {
-        existingProduct.productQuantity += 1;
+        existingProduct.quantity += 1;
       } else {
-        state.cartItems.push({ ...action.payload, productQuantity: 1 });
+        state.cartItems.push({ ...action.payload, quantity: 1 });
       }
     },
     decrement: (state, action) => {
@@ -31,8 +31,8 @@ const cartSlice = createSlice({
           item.productSize === action.payload.productSize
       );
 
-      if (existingProduct && existingProduct.productQuantity > 1) {
-        existingProduct.productQuantity -= 1;
+      if (existingProduct && existingProduct.quantity > 1) {
+        existingProduct.quantity -= 1;
       } else {
         state.cartItems = state.cartItems.filter(
           (item) =>
@@ -52,7 +52,7 @@ const cartSlice = createSlice({
 
       if (existingProduct) {
         // Subtract the quantity of the product from cartCount
-        state.cartCount -= existingProduct.productQuantity;
+        state.cartCount -= existingProduct.quantity;
 
         // Remove the product from cartItems
         state.cartItems = state.cartItems.filter(
@@ -67,12 +67,16 @@ const cartSlice = createSlice({
     setCart: (state, action) => {
       state.cartItems = action.payload;
       state.cartCount = action.payload.reduce(
-        (acc, item) => acc + item.productQuantity,
+        (acc, item) => acc + item.quantity,
         0
       );
     },
+    clearCart: (state, action) => {
+      state.cartItems = [];
+      state.cartCount = 0;
+    }
   },
 });
 
-export const { increment, decrement, removeFromCart, setCart } = cartSlice.actions;
+export const { increment, decrement, removeFromCart, setCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

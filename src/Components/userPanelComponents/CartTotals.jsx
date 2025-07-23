@@ -9,7 +9,7 @@ const CartTotals = ({placeOrder}) => {
   let shippingFee = 10;
 
   cartItems.forEach((element) => {
-    subTotal += element.productPrice*element.productQuantity;
+    subTotal += element.productPrice*element.quantity;
   });
 
   let total = 0;

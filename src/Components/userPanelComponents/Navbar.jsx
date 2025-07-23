@@ -14,6 +14,7 @@ import { loggedOut } from "../../slices/isLoggedIn/loggedInSlice";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { MdLightMode } from "react-icons/md";
 import { setDarkMode, toggleDarkMode } from "../../slices/darkMode/darkMode.js";
+import { clearCart } from "../../slices/cartData/cartSlice.js";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Navbar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isUser, setIsUser] = useState("");
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartCount = useSelector((state) => state.cart.cartCount);
 
   const isDark = useSelector((state) => state.dark.darkMode)
 
@@ -58,6 +60,7 @@ const Navbar = () => {
       );
       localStorage.removeItem("accessToken");
       dispatch(loggedOut());
+      dispatch(clearCart());
       setIsUser("");
       navigate("/");
     } catch (error) {
@@ -108,10 +111,9 @@ const Navbar = () => {
             to={path}
             key={name}
             className={({ isActive }) =>
-              `uppercase text-sm font-semibold cursor-pointer ${
-                isActive
-                  ? "text-black border-b-2 border-black"
-                  : "text-gray-700"
+              `uppercase text-sm font-semibold cursor-pointer ${isActive
+                ? "text-black border-b-2 border-black"
+                : "text-gray-700"
               }`
             }
           >
@@ -136,56 +138,55 @@ const Navbar = () => {
           <img src={search_icon} className="w-5 cursor-pointer" alt="search" />
         </div>
         {/* <NavLink className="relative"> */}
-          <div className="relative group">
-            <div
-              className={`${
-                isUser ? "bg-black" : ""
+        <div className="relative group">
+          <div
+            className={`${isUser ? "bg-black" : ""
               } w-6 h-6 xs:w-8 xs:h-8 rounded-full text-white flex justify-center items-center font-semibold text-base`}
-            >
-              {isUser ? (
-                isUser.name[0].toUpperCase()
-              ) : (
-                <img src={profile_icon} className="w-5" alt="profile" />
-              )}
-            </div>
-
-            <div className="w-fit h-fit rounded-md border border-black absolute top-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 flex flex-col gap-2 text-sm font-semibold overflow-hidden">
-              {isUser ? (
-                <>
-                  <NavLink to={"/profile"}>
-                    <div className="cursor-pointer hover:bg-black hover:text-white px-4 py-1">
-                      Profile
-                    </div>
-                  </NavLink>
-                  <div
-                    onClick={handleLogout}
-                    className="cursor-pointer hover:bg-black py-1 hover:text-white px-4 "
-                  >
-                    Logout
-                  </div>
-                </>
-              ) : (
-                <>
-                  <NavLink to="/login">
-                    <div className="cursor-pointer px-4 hover:bg-black hover:text-white py-1">
-                      Login
-                    </div>
-                  </NavLink>
-                  <NavLink to="/signup">
-                    <div className="cursor-pointer hover:bg-black py-1 hover:text-white px-4">
-                      Signup
-                    </div>
-                  </NavLink>
-                </>
-              )}
-            </div>
+          >
+            {isUser ? (
+              isUser.name[0].toUpperCase()
+            ) : (
+              <img src={profile_icon} className="w-5" alt="profile" />
+            )}
           </div>
+
+          <div className="w-fit h-fit rounded-md border border-black absolute top-8 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 flex flex-col gap-2 text-sm font-semibold overflow-hidden">
+            {isUser ? (
+              <>
+                <NavLink to={"/profile"}>
+                  <div className="cursor-pointer hover:bg-black hover:text-white px-4 py-1">
+                    Profile
+                  </div>
+                </NavLink>
+                <div
+                  onClick={handleLogout}
+                  className="cursor-pointer hover:bg-black py-1 hover:text-white px-4 "
+                >
+                  Logout
+                </div>
+              </>
+            ) : (
+              <>
+                <NavLink to="/login">
+                  <div className="cursor-pointer px-4 hover:bg-black hover:text-white py-1">
+                    Login
+                  </div>
+                </NavLink>
+                <NavLink to="/signup">
+                  <div className="cursor-pointer hover:bg-black py-1 hover:text-white px-4">
+                    Signup
+                  </div>
+                </NavLink>
+              </>
+            )}
+          </div>
+        </div>
         {/* </NavLink> */}
         <NavLink to={"/cart"}>
           <div className="relative">
             <img src={cart_icon} className="w-5 cursor-pointer" alt="cart" />
             <div className="absolute top-3 left-3 bg-black rounded-full px-1 text-xs text-white font-semibold">
-              {cartItems.length}
+              {cartCount}
             </div>
           </div>
         </NavLink>
@@ -201,9 +202,8 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       <div
-        className={`${
-          isNavOpen ? "translate-x-0" : "translate-x-full"
-        } fixed w-full h-screen bg-white z-10 duration-500`}
+        className={`${isNavOpen ? "translate-x-0" : "translate-x-full"
+          } fixed w-full h-screen bg-white z-10 duration-500`}
       >
         <div
           className="cursor-pointer flex gap-2 items-center"

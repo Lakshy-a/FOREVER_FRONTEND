@@ -2,22 +2,78 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import bin_icon from "../../assets/frontend_assets/bin_icon.png";
 import { decrement, increment, removeFromCart } from "../../slices/cartData/cartSlice";
+import axios from "axios";
 
 const ProductsInsideCart = ({ item, index }) => {
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  const total = useSelector((state) => state.cart.cartCount);
   const dispatch = useDispatch();
 
-  const handleRemoveProduct = (data) => {
-    dispatch(removeFromCart(data));
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const total = useSelector((state) => state.cart.cartCount);
+
+  // after removing the product from the cart also update the db
+  const handleRemoveProduct = async (data) => {
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/cart/removeProductFromCart`,
+        {
+          data: { productId: data.productId, productSize: data.productSize },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        dispatch(removeFromCart(data));
+      }
+    } catch (error) {
+      console.error("Error in removing the product from cart", error);
+    }
   };
 
-  const handleDecreaseCount = (data) => {
-    dispatch(decrement(data));
+
+  // after decreasing the quantity also update the same in db
+  const handleDecreaseCount = async (data) => {
+    await axios
+      .patch(
+        `${import.meta.env.VITE_API_BASE_URL}/cart/decreaseProductItemIncart`,
+        {
+          productId: data.productId,
+          productSize: data.productSize
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status == 200)
+          dispatch(decrement(data));
+      })
+      .catch((error) => console.error("Error in increasing the product quantity in cart", error));
   };
 
-  const handleIncreaseCount = (data) => {
-    dispatch(increment(data));
+  // after increasing the quantity also update the same in db
+  const handleIncreaseCount = async (data) => {
+    await axios
+      .patch(
+        `${import.meta.env.VITE_API_BASE_URL}/cart/increaseProductItemIncart`,
+        {
+          productId: data.productId,
+          productSize: data.productSize
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status == 200)
+          dispatch(increment(data));
+      })
+      .catch((error) => console.error("Error in increasing the product quantity in cart", error));
   };
 
   return (
@@ -36,13 +92,13 @@ const ProductsInsideCart = ({ item, index }) => {
       </div>
       <div className="flex gap-4 items-center">
         <span
-          className="text-sm xs:text-xl border border-black rounded-md px-2 cursor-pointer"
-          onClick={() => handleDecreaseCount(item)}
+          className={`text-sm xs:text-xl border border-black rounded-md px-2 cursor-pointer ${item.quantity === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+          onClick={() => (item.quantity > 1) && handleDecreaseCount(item)}
           id={index}
         >
           -
         </span>
-        <span className="text-sm xs:text-lg font-semibold">{item.productQuantity}</span>
+        <span className="text-sm xs:text-lg font-semibold">{item.quantity}</span>
         <span
           className="text-sm xs:text-xl border px-2 rounded-md border-black cursor-pointer"
           onClick={() => handleIncreaseCount(item)}
