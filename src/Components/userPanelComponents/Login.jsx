@@ -48,15 +48,18 @@ const Login = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const response = await axios.get(
+        await axios.get(
           `${import.meta.env.VITE_API_BASE_URL}/cart/getUsersCart`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
           }
-        );
-        dispatch(setCart(response.data.data.products)); 
+        )
+          .then((response) => {
+            if (response.status == 200)
+              dispatch(setCart(response.data.data.products));
+          })
       } catch (error) {
         console.error("Error fetching data:", error);
       }

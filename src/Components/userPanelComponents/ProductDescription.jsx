@@ -15,7 +15,7 @@ const ProductDescription = ({ product }) => {
   const dispatch = useDispatch();
   const logged = useSelector((state) => state.loggedIn.isLoggedIn);
 
-  // Fallback values for product fields
+  // desctructuring values from product received via prop
   const {
     _id = "",
     productName = "Unnamed Product",
@@ -38,11 +38,13 @@ const ProductDescription = ({ product }) => {
   });
 
   const handleAddToCart = () => {
+    // you can add to cart only if you are logged in 
     if (!logged) {
       toast.error("You need to log in first!");
       return;
     }
 
+    // before adding any product to cart you need to first select a size
     if (!selectedSize) {
       toast.error("Select a product size!");
       return;
@@ -52,9 +54,9 @@ const ProductDescription = ({ product }) => {
       productId: _id,
       productTitle: productName,
       productPrice,
-      productImage: images[0], // Main image
+      productImage: images[0],
       productSize: selectedSize,
-      productQuantity: 1, // Default quantity
+      productQuantity: 1,
     };
 
     axios
@@ -67,10 +69,11 @@ const ProductDescription = ({ product }) => {
           },
         }
       )
-      .then((response) => console.log("Add to cart success"))
+      .then((response) => {
+        if (response.status == 200)
+          dispatch(increment(productData));
+      })
       .catch((error) => console.error(error));
-
-    dispatch(increment(productData));
     toast.success("Product added to cart!");
   };
 
