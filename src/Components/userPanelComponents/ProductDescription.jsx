@@ -32,11 +32,6 @@ const ProductDescription = ({ product }) => {
     ? availableSizes
     : JSON.parse(availableSizes || "[]");
 
-  useEffect(() => {
-    // console.log("Parsed Sizes", typeof parsedSizes[0]);
-    // parsedSizes[0].map((item, index) => console.log(item))
-  });
-
   const handleAddToCart = () => {
     // you can add to cart only if you are logged in 
     if (!logged) {
