@@ -20,7 +20,6 @@ const ForgotPassword = () => {
   });
 
   const handleClick = (data) => {
-    console.log(data);
     reset();
   };
 
