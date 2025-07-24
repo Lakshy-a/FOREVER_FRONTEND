@@ -5,6 +5,7 @@ import cartReducer from "../slices/cartData/cartSlice.js";
 import filterReducer from "../slices/filterData/filterSlice";
 import isLoggedReducer, { loggedIn } from "../slices/isLoggedIn/loggedInSlice.js";
 import darkModeReducer from "../slices/darkMode/darkMode.js";
+import refreshReducer from "../slices/refreshPage/refreshSlice.js"
 import { loadState, saveState } from "../utils/localStorage.js";
 
 const preloadedState = loadState();
@@ -17,6 +18,7 @@ export const store = configureStore({
     filter: filterReducer,
     loggedIn: isLoggedReducer,
     dark: darkModeReducer,
+    refresh: refreshReducer,
   },
   preloadedState
 });

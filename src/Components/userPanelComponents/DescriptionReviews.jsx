@@ -4,8 +4,12 @@ import star_dull_icon from "../../assets/frontend_assets/star_dull_icon.png";
 import star_icon from "../../assets/frontend_assets/star_icon.png";
 import { FaStarHalfAlt, FaStar } from "react-icons/fa";
 import { ImStarEmpty } from "react-icons/im";
+import { useDispatch, useSelector } from "react-redux";
+import { triggerRefresh } from "../../slices/refreshPage/refreshSlice";
 
 const DescriptionReviews = ({ id }) => {
+  const dispatch = useDispatch();
+  const isLogged = useSelector((state) => state.loggedIn.isLoggedIn);
   const [description, setDescription] = useState(true);
   const [reviews, setReviews] = useState(false);
   const [reviewsCount, setReviewsCount] = useState(0);
@@ -27,15 +31,11 @@ const DescriptionReviews = ({ id }) => {
   };
 
   useEffect(() => {
+    setIsLoggedIn(isLogged)
     axios
       .get(`${import.meta.env.VITE_API_BASE_URL}/reviews/getReviewsByProduct/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        })
+      )
       .then((response) => {
-        // setIsLoggedIn(accessToken);
         setReviewsCount(response.data.data.length);
         setReviewText(response.data.data);
       })
@@ -56,27 +56,33 @@ const DescriptionReviews = ({ id }) => {
     return <div className="flex">{stars}</div>;
   };
 
-  const handleAddReview = () => {
-    if (addReview) {
-      const newReview = {
-        review: reviewComment,
-        rating: selectedRating,
-        productId: id,
-      };
+  const handleAddReview = (e) => {
+    const buttonText = e.target.textContent;
 
-      axios
-        .post(`${import.meta.env.VITE_API_BASE_URL}/reviews/addReview`, newReview,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
+    if (addReview) {
+      // send the post review request only if the text of button is Post Review
+      if (buttonText === "Post Review") {
+        const newReview = {
+          review: reviewComment,
+          rating: selectedRating,
+          productId: id,
+        };
+
+        axios
+          .post(`${import.meta.env.VITE_API_BASE_URL}/reviews/addReview`, newReview,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              },
+            })
+          .then((response) => {
+            setAddReview(false);
+            dispatch(triggerRefresh());
+            setReviewComment("");
+            setSelectedRating(0);
           })
-        .then((response) => {
-          setAddReview(false);
-          setReviewComment("");
-          setSelectedRating(0);
-        })
-        .catch((error) => console.log(error));
+          .catch((error) => console.log(error));
+      }
     } else {
       setAddReview(true);
     }
@@ -189,7 +195,7 @@ const DescriptionReviews = ({ id }) => {
           {isLoggedIn ? (
             <button
               className="mt-4 px-4 py-2 rounded-full cursor-pointer font-semibold hover:bg-white hover:text-black hover:border border-gray-900  w-fit bg-black text-white"
-              onClick={handleAddReview}
+              onClick={(e) => handleAddReview(e)}
             >
               {addReview ? "Post Review" : "Write a Review"}
             </button>
