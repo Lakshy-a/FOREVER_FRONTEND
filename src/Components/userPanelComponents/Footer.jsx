@@ -11,7 +11,7 @@ const Footer = () => {
   const isDark = useSelector((state) => state.dark.darkMode)
 
   return (
-    <div className={` px-4 md:px-4 lg:px-28 xs:flex justify-between mt-10 xs:mt-20`}>
+    <div className={` px-4 md:px-4 lg:px-28 xs:flex justify-between mt-10 xs:mt-20 mb-6`}>
       <div>
         <div>
           <img src={logo} className="w-36 cursor-pointer" alt="logo" />

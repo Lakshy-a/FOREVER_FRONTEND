@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   addCategory,
   removeCategory,
@@ -31,6 +31,26 @@ const Filters = ({ item }) => {
       dispatch(addSubCategory(value));
     }
   };
+
+  useEffect(() => {
+    if (products.length === 0) return;
+
+    let filteredProducts = products[0];
+
+    if (selectedCategories.length > 0) {
+      filteredProducts = filteredProducts.filter(product =>
+        selectedCategories.includes(product.productCategory)
+      );
+    }
+
+    if (selectedSubCategories.length > 0) {
+      filteredProducts = filteredProducts.filter(product =>
+        selectedSubCategories.includes(product.productSubCategory)
+      );
+    }
+    setFetchedData(filteredProducts);
+  }, [selectedCategories, selectedSubCategories, products]);
+
 
   return (
     <div className="border border-gray-400 pl-6 pr-6 xs:pr-28 py-3 mt-8">

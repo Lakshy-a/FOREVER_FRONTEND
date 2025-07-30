@@ -35,7 +35,7 @@ const MoreImages = ({ images = [] }) => {
             key={index}
             src={image}
             alt={`Thumbnail ${index + 1}`}
-            className="w-20 xs:w-[180px] cursor-pointer object-cover"
+            className="w-16 xs:w-[160px] cursor-pointer object-cover"
             onClick={() => changeClick(image)}
           />
         ))}
