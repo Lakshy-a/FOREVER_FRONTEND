@@ -100,6 +100,7 @@ const CollectionPage = () => {
 
   return (
     <div className="custom-padding mt-8">
+      {/* search bar */}
       <div
         className={`${
           isSearchBarOpen ? "block" : "hidden"
@@ -108,6 +109,7 @@ const CollectionPage = () => {
         <SearchBar onSearch={handleSearch} />
       </div>
       <div className="xs:flex gap-16 mt-12">
+        {/* filters */}
         <div>
           <div
             className="text-xl font-semibold flex items-center justify-between gap-2 uppercase mt-2"

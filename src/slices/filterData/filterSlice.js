@@ -30,9 +30,6 @@ export const filterSlice = createSlice({
     setSortingFilter: (state, action) => {
       state.sortFilters = action.payload;
     },
-    // setClearFilter: (state, action) => {
-    // },
-
     resetFilters: (state, action) => {
       state.clearFilter = !state.clearFilter;
       state.categories = [];
